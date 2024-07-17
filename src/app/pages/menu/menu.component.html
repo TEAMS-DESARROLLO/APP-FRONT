@@ -1,0 +1,40 @@
+<mat-toolbar class="mat-elevation-z8 flexExpand">
+  {{titulo}}
+  <button mat-icon-button *ngIf="sidenav.mode === 'over'" (click)="sidenav.toggle()">
+    <mat-icon *ngIf="!sidenav.opened" > menu </mat-icon>
+    <mat-icon *ngIf="sidenav.opened" > close </mat-icon>
+  </button>
+  <span class="flexExpand"></span>
+  <button mat-icon-button matTooltip="Salir" (click)="logaout()" >
+
+    <mat-icon  >logout</mat-icon>
+  </button>
+</mat-toolbar>
+
+<!--  componente para notificaciones -->
+<snack-bar-notificacion></snack-bar-notificacion>
+
+<mat-sidenav-container>
+
+  <mat-sidenav #sidenav="matSidenav" style="overflow:hidden;">
+
+    <img
+      class="avatar mat-elevation-z8"
+      src="https://source.unsplash.com/c_GmwfHBDzk/200x200"
+    />
+
+    <h4 class="name">Carlos A. Rojas C.</h4>
+
+    <p-panelMenu [model]="itemsMenu" styleClass="w-full md:w-20rem" class="p-menu-list"/>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+
+    <div class="content">
+      <router-outlet></router-outlet>
+    </div>
+
+  </mat-sidenav-content>
+
+</mat-sidenav-container>
+

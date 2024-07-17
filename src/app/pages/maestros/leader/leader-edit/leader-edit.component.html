@@ -1,0 +1,51 @@
+<mat-card class="max-width">
+
+  <mat-card-header style="margin-left: 5px;">
+    <mat-card-title><h3>{{title}}</h3>  </mat-card-title>
+  </mat-card-header>
+  <div style="margin-bottom: 10px;"></div>
+
+  <mat-card-content>
+
+
+    <form  (keydown.enter)="$event.preventDefault()" [formGroup]="customerForm">
+
+      <div class="flex-container">
+        <div style="flex-grow: 0;">
+          <mat-form-field class="form-field" appearance="outline">
+            <mat-label>Id Lider</mat-label>
+            <input readonly="true" matInput formControlName="idLeader" placeholder="Codigo">
+          </mat-form-field>
+
+        </div>
+
+      </div>
+
+    <div class="flex-container" >
+      <div style="flex-grow: 1;">
+        <mat-form-field class="form-field" appearance="outline">
+          <mat-label>Nombres</mat-label>
+          <input #myDescripcion matInput formControlName="names"  placeholder="Nombres y apellidos del lider">
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="flex-container" >
+      <div style="flex-grow: 0;">
+
+        <app-drop-down-shared _captionLabel="Comunidad" [_datosInput]="this.dataCommunity" [_formControl]="idCommunityForm"   ></app-drop-down-shared>
+      </div>
+    </div>
+
+    <br>
+      <shared-toolbar-save-quit [_disabledSaveUpdate]="!customerForm.valid" [_flagCreate]="_createRegister"
+       (_save)="save()"
+       (_update)="update()"
+       (_quit)="quit($event)">
+      </shared-toolbar-save-quit>
+
+    </form>
+  </mat-card-content>
+</mat-card>
+
+

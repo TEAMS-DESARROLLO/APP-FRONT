@@ -1,0 +1,114 @@
+<mat-card class="max-width">
+
+  <mat-card-header style="margin-left: 5px;">
+    <mat-card-title><h3>{{title}}</h3>  </mat-card-title>
+  </mat-card-header>
+  <div style="margin-bottom: 10px;"></div>
+
+  <mat-card-content>
+
+
+    <form  (keydown.enter)="$event.preventDefault()" [formGroup]="customerForm">
+
+      <div class="flex-container">
+        <div style="flex-grow: 0;">
+          <mat-form-field class="form-field" appearance="outline">
+            <mat-label>Codigo cliente</mat-label>
+            <input readonly="true" matInput formControlName="idCliente" placeholder="Id Cliente">
+          </mat-form-field>
+
+        </div>
+
+      </div>
+
+
+
+    <div class="flex-container">
+      <div style="flex-grow: 0;">
+        <app-drop-down-shared _captionLabel="Tipo  Identidad" [_datosInput]="this.dataTipoDocumentoIdentidad" [_formControl]="idTipoDocumentoIdendidadForm"   ></app-drop-down-shared>
+      </div>
+
+      <div style="flex-grow: 1;">
+        <mat-form-field class="form-field" appearance="outline">
+          <mat-label>Nro Documento Identidad</mat-label>
+          <input #myDescripcion matInput formControlName="numeroDocumentoIdentidad"  placeholder="Ingrese Numero Doc.">
+        </mat-form-field>
+      </div>
+
+    </div>
+
+    <div class="flex-container">
+      <div style="flex-grow: 1;">
+        <mat-form-field class="form-field" appearance="outline">
+          <mat-label>Nombres</mat-label>
+          <input #myDescripcion matInput formControlName="nombres"  placeholder="Ingrese nombre(s)">
+        </mat-form-field>
+      </div>
+
+      <div style="flex-grow: 1;">
+        <mat-form-field class="form-field" appearance="outline">
+          <mat-label>Apellido 1</mat-label>
+          <input #myDescripcion matInput formControlName="apellido1"  placeholder="Ingrese apellido 1">
+        </mat-form-field>
+      </div>
+      <div style="flex-grow: 1;">
+        <mat-form-field class="form-field" appearance="outline">
+          <mat-label>Apellido 2</mat-label>
+          <input #myDescripcion matInput formControlName="apellido2"  placeholder="Ingrese apellido 2">
+        </mat-form-field>
+      </div>
+
+    </div>
+    <div class="flex-container">
+      <div style="flex-grow: 1;">
+        <mat-form-field class="form-field" appearance="outline">
+          <mat-label>Domicilio Fiscal</mat-label>
+          <input #myDescripcion matInput formControlName="domicilioFiscal"  placeholder="Ingrese domicilio fiscal">
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="flex-container">
+      <div style="flex-grow: 1;">
+        <mat-form-field class="form-field" appearance="outline">
+          <mat-label>email</mat-label>
+          <input #myDescripcion matInput formControlName="email"  placeholder="Ingrese email">
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="flex-container">
+      <div style="flex-grow: 1;">
+        <mat-form-field class="form-field" appearance="outline">
+          <mat-label>Celular 1</mat-label>
+          <input #myDescripcion matInput formControlName="cel1"  placeholder="000-000-000" mask='(000) 000-0000'>
+        </mat-form-field>
+      </div>
+      <div style="flex-grow: 1;">
+        <mat-form-field class="form-field" appearance="outline">
+          <mat-label>Celular 2</mat-label>
+          <input #myDescripcion matInput formControlName="cel2"  placeholder="Ingrese celular 2">
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="flex-container">
+      <div style="flex-grow: 0;">
+        <mat-form-field class="form-field" appearance="outline">
+          <mat-label>Estado</mat-label>
+          <input rows="5" matInput formControlName="estado" placeholder="Estado" readonly="true">
+        </mat-form-field>
+      </div>
+    </div>
+
+    <br>
+      <shared-toolbar-save-quit [_disabledSaveUpdate]="!customerForm.valid" [_flagCreate]="_createRegister"
+       (_save)="save()"
+       (_update)="update()"
+       (_quit)="quit($event)">
+      </shared-toolbar-save-quit>
+
+    </form>
+  </mat-card-content>
+</mat-card>
+
+

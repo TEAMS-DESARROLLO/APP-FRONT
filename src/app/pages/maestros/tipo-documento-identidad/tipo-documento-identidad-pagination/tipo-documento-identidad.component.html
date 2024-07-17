@@ -1,0 +1,21 @@
+{{title}}
+
+<div class="flex-container">
+  <shared-toolbar-toolbox [_disabledEdit]=this.disabledEdit [_disabledDelete]=this.disabledDelete (_newRegistro)="newRegister()"
+    (_editRegistro)="edit()"
+    (_reLoad)="reload()" ></shared-toolbar-toolbox>
+  <ag-grid-angular
+      style="width: 100%; height: 100%;"
+
+      [class]="themeClass"
+      [rowData]="rowData"
+      [columnDefs]="colDefs"
+      [pagination]="true"
+      [enableCellTextSelection]=true
+      (gridReady)="onGridReady($event)"
+      (selectionChanged)="onSelectionChanged($event)"
+      [gridOptions]="gridOptions"
+      >
+  </ag-grid-angular>
+</div>
+

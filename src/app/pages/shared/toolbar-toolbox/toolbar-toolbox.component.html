@@ -1,0 +1,33 @@
+<div>
+
+
+    <button  *ngIf="_iconNewShow" [disabled]=_disabledNew  matTooltip={{_iconNewTooltip}} mat-icon-button color="primary" aria-label="Example icon-button with a heart icon"
+      (click)="newRegistro()">
+      <mat-icon>{{_iconNew}}</mat-icon>
+    </button>
+
+    <button *ngIf="_iconEditShow" [disabled]=!_disabledEdit  matTooltip={{_iconEditToolTip}} mat-icon-button color="primary" aria-label="Example icon-button with a heart icon"
+      (click)="editRegistro()">
+      <mat-icon>{{_iconEdit}}</mat-icon>
+    </button>
+
+    <button *ngIf="_iconDeleteShow" [disabled]=!_disabledDelete matTooltip={{_iconDeleteToolTip}} mat-icon-button color="primary" aria-label="Example icon-button with a heart icon"
+      (click)="deleteRegistro()">
+      <mat-icon>{{_iconDelete}}</mat-icon>
+    </button>
+
+    <button *ngIf="_iconPrintShow" matTooltip={{_iconPrintToolTip}} mat-icon-button color="primary" aria-label="Example icon-button with a heart icon"
+      (click)="printPdf()">
+      <mat-icon>{{_iconPrint}}</mat-icon>
+    </button>
+
+    <button *ngIf="_iconExportShow" matTooltip={{_iconExportToolTip}} mat-icon-button color="primary" aria-label="Example icon-button with a heart icon"
+      (click)="printExcel()">
+      <mat-icon>{{_iconExport}}</mat-icon>
+    </button>
+
+    <button *ngIf="_iconLoadShow" matTooltip={{_iconLoadToolTip}} mat-icon-button color="primary" aria-label="Example icon-button with a heart icon"
+      (click)="reload()">
+      <mat-icon>{{_iconLoad}}</mat-icon>
+    </button>
+  </div>

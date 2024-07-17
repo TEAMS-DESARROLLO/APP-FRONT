@@ -1,0 +1,74 @@
+<mat-card class="max-width">
+
+  <mat-card-header style="margin-left: 5px;">
+    <mat-card-title><h3>{{title}}</h3>  </mat-card-title>
+  </mat-card-header>
+  <div style="margin-bottom: 10px;"></div>
+
+  <mat-card-content>
+
+
+    <form  (keydown.enter)="$event.preventDefault()" [formGroup]="customerForm">
+
+      <div class="flex-container">
+        <div style="flex-grow: 0;">
+          <mat-form-field class="form-field" appearance="outline">
+            <mat-label>Codigo Colaborador</mat-label>
+            <input readonly="true" matInput formControlName="idCollaborator" placeholder="id Collaborador">
+          </mat-form-field>
+
+        </div>
+
+      </div>
+
+    <div class="flex-container">
+      <div style="flex-grow: 1;">
+        <mat-form-field class="form-field" appearance="outline">
+          <mat-label>nombres</mat-label>
+          <input #myDescripcion matInput formControlName="names"  placeholder="Nombres">
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="flex-container">
+      <div style="flex-grow: 0;">
+        <mat-form-field class="form-field" appearance="outline">
+          <mat-label>Apellidos</mat-label>
+          <input #myAbreviacion matInput formControlName="lastName" placeholder="Apellidos">
+        </mat-form-field>
+      </div>
+    </div>
+    <div style="height: 10px;"></div>
+
+    <div class="flex-container" >
+      <div style="flex-grow: 0;">
+        <app-drop-down-shared _captionLabel="Lider de practica" [_datosInput]="this.dataLeader" [_formControl]="idLeaderForm"   ></app-drop-down-shared>
+      </div>
+    </div> 
+    <div style="height: 10px;"></div>
+
+    <div class="flex-container" >
+      <div style="flex-grow: 0;">
+        <app-drop-down-shared _captionLabel="Rol" [_datosInput]="this.dataRol" [_formControl]="idRolForm"   ></app-drop-down-shared>
+      </div>
+    </div> 
+    <div style="height: 10px;"></div>
+
+    <div class="flex-container" >
+      <div style="flex-grow: 0;">
+        <app-drop-down-shared _captionLabel="Lider funcional" [_datosInput]="this.dataFunctionalLeader" [_formControl]="idFunctionalLeaderForm"   ></app-drop-down-shared>
+      </div>
+    </div> 
+
+    <br>
+      <shared-toolbar-save-quit [_disabledSaveUpdate]="!customerForm.valid" [_flagCreate]="_createRegister"
+       (_save)="save()"
+       (_update)="update()"
+       (_quit)="quit($event)">
+      </shared-toolbar-save-quit>
+
+    </form>
+  </mat-card-content>
+</mat-card>
+
+

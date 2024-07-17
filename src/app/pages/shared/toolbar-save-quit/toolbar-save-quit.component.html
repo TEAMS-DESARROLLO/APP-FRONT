@@ -1,0 +1,30 @@
+<div class="flex-container">
+
+  <div>
+
+    <button [disabled]=_disabledSaveUpdate *ngIf="_flagCreate else elseBlock"  matTooltip="Grabar" mat-icon-button color="primary" aria-label="Example icon-button with a heart icon"
+      (click)="save()">
+      <mat-icon>save</mat-icon>
+    </button>
+  </div>
+
+  <div>
+    <ng-template #elseBlock>
+      <button [disabled]=_disabledSaveUpdate  matTooltip="Actualizar" mat-icon-button color="primary" aria-label="Example icon-button with a heart icon"
+      (click)="update()">
+      <mat-icon>save</mat-icon>
+      </button>
+    </ng-template>
+
+  </div>
+
+
+  <div>
+
+    <button   matTooltip="Salir" mat-icon-button color="primary" aria-label="Example icon-button with a heart icon"
+      (click)="quit()">
+      <mat-icon>exit_to_app</mat-icon>
+    </button>
+  </div>
+
+</div>

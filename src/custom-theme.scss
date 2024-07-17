@@ -1,0 +1,52 @@
+@use '@angular/material' as mat;
+
+@include mat.core();
+
+
+$my-primary: mat.define-palette(mat.$blue-palette, 500);
+$my-accent: mat.define-palette(mat.$orange-palette, A200, A100, A400);
+
+$my-theme: mat.define-light-theme((
+ color: (
+   primary: $my-primary,
+   accent: $my-accent,
+ ),
+ typography: mat.define-typography-config(),
+ density: 0,
+));
+
+
+// Define a dark theme
+$dark-theme: mat.define-dark-theme((
+  color: (
+    primary: mat.define-palette(mat.$gray-palette,100),
+    accent: mat.define-palette(mat.$gray-palette,900),
+    warn: mat.define-palette(mat.$yellow-palette,A400)
+
+    ),
+    // Only include `typography` and `density` in the default dark theme.
+
+    typography: mat.define-typography-config(),
+    density: 0,
+    ));
+
+
+.dark-theme{
+  @include mat.core-theme($dark-theme);
+  @include mat.button-theme($dark-theme);
+  @include mat.card-theme($dark-theme);
+  @include mat.all-component-themes($dark-theme);
+
+  color: white;
+
+}
+.my-theme{
+  @include mat.all-component-themes($my-theme);
+  @include mat.core-theme($my-theme);
+  @include mat.button-theme($my-theme);
+
+
+}
+
+
+

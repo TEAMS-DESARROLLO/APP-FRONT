@@ -1,0 +1,55 @@
+<mat-card class="max-width">
+
+  <mat-card-header style="margin-left: 5px;">
+    <mat-card-title><h3>{{title}}</h3>  </mat-card-title>
+  </mat-card-header>
+  <div style="margin-bottom: 10px;"></div>
+
+  <mat-card-content>
+
+
+    <form  (keydown.enter)="$event.preventDefault()" [formGroup]="customerForm">
+
+      <div class="flex-container">
+        <div style="flex-grow: 0;">
+          <mat-form-field class="form-field">
+            <mat-label>Id Rol</mat-label>
+            <input readonly="true" matInput formControlName="idRol" placeholder="Id Rol">
+          </mat-form-field>
+
+        </div>
+
+      </div>
+
+    <div class="flex-container">
+      <div style="flex-grow: 1;">
+        <mat-form-field class="form-field">
+          <mat-label>Codigo Rol</mat-label>
+          <input #myDescripcion matInput formControlName="codigoRol"  placeholder="Codigo rol">
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="flex-container">
+      <div style="flex-grow: 0;">
+        <mat-form-field class="form-field">
+          <mat-label>descripcion</mat-label>
+          <input #myAbreviacion matInput formControlName="description" placeholder="descripcion">
+        </mat-form-field>
+      </div>
+    </div>
+
+
+
+    <br>
+      <shared-toolbar-save-quit [_disabledSaveUpdate]="!customerForm.valid" [_flagCreate]="_createRegister"
+       (_save)="save()"
+       (_update)="update()"
+       (_quit)="quit($event)">
+      </shared-toolbar-save-quit>
+
+    </form>
+  </mat-card-content>
+</mat-card>
+
+

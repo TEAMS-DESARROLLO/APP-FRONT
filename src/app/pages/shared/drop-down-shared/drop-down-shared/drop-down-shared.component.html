@@ -1,0 +1,9 @@
+<mat-form-field [style.width.px]="300" appearance="outline">
+  <mat-label>{{_captionLabel}}</mat-label>
+  <mat-select  [formControl]="this._formControl" [compareWith]="compareFn" (selectionChange)="_onSelectionChange($event)">
+    @for (item of _datosInput; track item) {
+      <mat-option  [value]="item.value">{{item.viewValue}}</mat-option>
+    }
+  </mat-select>
+</mat-form-field>
+

@@ -1,0 +1,30 @@
+version: '3.8'
+services:
+  apache:
+    image: httpd:latest
+    container_name: my-apache-app
+    ports:
+    - '6001:6001'
+    volumes:
+    # - ./website:/usr/local/apache2/htdocs
+    - /home/fuentes/folder-app-isp/website:/usr/local/apache2/htdocs
+    # - /home/fuentes/folder-app-isp/conf:/usr/local/apache2/conf
+
+  # mcsv-app-isp:
+  #   container_name: mcsv-app-isp
+  #   image: app-isp:1.0.1
+    # build:
+    #   context: ./
+    #   dockerfile: ./eureka-server/Dockerfile
+    # ports:
+      # - '6001:6001'
+
+    # networks:
+    #   - spring
+
+    restart: always
+
+# networks:
+#   spring:
+#     external: true
+#     name: spring
