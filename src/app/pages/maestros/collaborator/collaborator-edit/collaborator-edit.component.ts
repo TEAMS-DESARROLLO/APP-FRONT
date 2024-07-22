@@ -113,7 +113,6 @@ export default class CollaboratorEditComponent implements OnExit {
  
     this.commonsService.data$.subscribe(
       res => {
-        
         this.dataLeader = res;
       }
     )
