@@ -13,7 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/app-isp",
+            "outputPath": "dist/app-follow",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
@@ -42,12 +42,12 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kb",
+                  "maximumWarning": "1Mb",
                   "maximumError": "2mb"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "500kb",
+                  "maximumWarning": "1Mb",
                   "maximumError": "2Mb"
                 }
               ],

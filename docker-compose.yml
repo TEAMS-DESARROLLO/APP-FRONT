@@ -7,7 +7,7 @@ services:
     - '6001:6001'
     volumes:
     # - ./website:/usr/local/apache2/htdocs
-    - /home/fuentes/folder-app-isp/website:/usr/local/apache2/htdocs
+    - /home/fuentes/mcsv-front/website:/usr/local/apache2/htdocs
     # - /home/fuentes/folder-app-isp/conf:/usr/local/apache2/conf
 
   # mcsv-app-isp:
