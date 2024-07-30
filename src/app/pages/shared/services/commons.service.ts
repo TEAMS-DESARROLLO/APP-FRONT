@@ -20,6 +20,43 @@ export class CommonsService {
 
   constructor() { }
 
+  loadStatusCollaboratorForComboWithLabel(){
+    let dataArray:DataSoureDropDownComboInterface[]=[];
+    this.crudService.getAll("statuscollaborator","all",null)
+    .subscribe(
+      {
+        next:(res)=> {
+          let data = res ;
+          data.forEach( element => {
+
+            const dato:DataSoureDropDownComboInterface = {
+              "value" : element.idStatusCollaborator,
+              "viewValue" : element.descriptionStatusCollaborator
+            }
+
+            dataArray.push(dato);
+
+          } );
+
+          //devolucion con grupo
+          const info:CommonsDataInteface ={
+            "group":"statusCollaborator",
+            "dataArray": dataArray
+          }
+          this.commonsData$.next(info);
+
+        }
+        ,
+        error:(error)=> {
+          this.messagesService.message_error('Atencion',error.message);
+          return [];
+        }
+      }
+    );
+    return [];
+
+  }  
+
   loadFunctionalLeaderForComboWithLabel(){
     let dataArray:DataSoureDropDownComboInterface[]=[];
     this.crudService.getAll("functionalLeader","all",null)

@@ -45,6 +45,7 @@ export default class CollaboratorEditComponent implements OnExit {
   dataLeader:DataSoureDropDownComboInterface[]=[];
   dataFunctionalLeader:DataSoureDropDownComboInterface[]=[];
   dataRol:DataSoureDropDownComboInterface[]=[];
+  dataStatusCollaborator:DataSoureDropDownComboInterface[]=[];
 
   get f() { return this.customerForm.controls; }
 
@@ -63,6 +64,7 @@ export default class CollaboratorEditComponent implements OnExit {
     functionalLeaderNames: ['', Validators.required],
     idCommunity: ['', Validators.required],
     descripcion: ['', Validators.required],
+    idStatusCollaborator: ['', Validators.required],
 
   });  
 
@@ -77,6 +79,9 @@ export default class CollaboratorEditComponent implements OnExit {
   }  
   get idFunctionalLeaderForm (){
     return this.customerForm.get('idFunctionalLeader') as FormControl;
+  }  
+  get idStatusCollaboratorForm (){
+    return this.customerForm.get('idStatusCollaborator') as FormControl;
   }  
 
 
@@ -125,7 +130,9 @@ export default class CollaboratorEditComponent implements OnExit {
         if(res.group=="functionalLeader"){
           this.dataFunctionalLeader = res.dataArray;
         }
-        
+        if(res.group=="statusCollaborator"){
+          this.dataStatusCollaborator = res.dataArray;
+        }        
       }
     )
 
@@ -133,6 +140,7 @@ export default class CollaboratorEditComponent implements OnExit {
     this.commonsService.loadLeaderForCombo();
     this.commonsService.loadRolForComboWithLabel();
     this.commonsService.loadFunctionalLeaderForComboWithLabel();
+    this.commonsService.loadStatusCollaboratorForComboWithLabel();
 
     this.loadFromServer();
 

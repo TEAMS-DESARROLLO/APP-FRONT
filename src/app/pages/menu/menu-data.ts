@@ -13,25 +13,25 @@ export const MENU_DATA: Menu = {
     },
     {
       id: 20,
-      nombre: 'Comercial',
+      nombre: 'Operaciones',
       icon: 'folder_oopen',
       url : '',
       subcategorias : [
         {
           id:1,
-          nombre: 'Instalacion',
+          nombre: 'Disponible',
           icon: 'settings_input_hdmi',
           url : 'user'
         },
         {
           id:2,
-          nombre: 'Registrar Averia',
+          nombre: 'Mapeo tecnologias ',
           icon: 'phonelink_erase',
           url : ''
         },
         {
           id:2,
-          nombre: 'Clientes',
+          nombre: 'Search',
           icon: 'group_add',
           url : 'cliente'
         }

@@ -59,6 +59,11 @@
         <app-drop-down-shared _captionLabel="Lider funcional" [_datosInput]="this.dataFunctionalLeader" [_formControl]="idFunctionalLeaderForm"   ></app-drop-down-shared>
       </div>
     </div> 
+    <div class="flex-container" >
+      <div style="flex-grow: 0;">
+        <app-drop-down-shared _captionLabel="Estado Colaborador" [_datosInput]="this.dataStatusCollaborator" [_formControl]="idStatusCollaboratorForm"   ></app-drop-down-shared>
+      </div>
+    </div> 
 
     <br>
       <shared-toolbar-save-quit [_disabledSaveUpdate]="!customerForm.valid" [_flagCreate]="_createRegister"

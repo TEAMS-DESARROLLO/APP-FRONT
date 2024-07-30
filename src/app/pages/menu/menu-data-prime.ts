@@ -4,25 +4,31 @@ import { Menu } from "./menu.interface";
 
 export const MENU_DATA_PRIME = [
   {
-    label: 'Comercial',
+    label: 'Operaciones',
     items: [
         {
-            label: 'Instalacion',
+            label: 'Disponibles',
             shortcut: '⌘+N',
             icon: 'pi pi-wifi',
 
         },
         {
-            label: 'Averias',
+            label: 'Mapeo tecnologia',
             icon: 'pi pi-bolt',
             shortcut: '⌘+S'
         },
         {
-            label: 'Clientes',
+            label: 'Search',
             icon: 'pi pi-user',
             shortcut: '⌘+S',
             routerLink: 'cliente'
         },
+        {
+          label: 'Certificaciones',
+          icon: 'pi pi-user',
+          shortcut: '⌘+S',
+          routerLink: 'cliente'
+      },        
     ]
   },
   {
