@@ -1,4 +1,4 @@
-export interface TipoViaInterface {
+export interface CollaboratorInterface {
   idCollaborator:string,
   lastName:string,
   names:string,

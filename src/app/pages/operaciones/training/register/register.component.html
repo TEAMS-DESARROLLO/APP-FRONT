@@ -1,0 +1,79 @@
+<mat-card class="max-width">
+
+    <mat-card-header style="margin-left: 5px;">
+      <mat-card-title><h3>{{title}}</h3>  </mat-card-title>
+    </mat-card-header>
+    <div style="margin-bottom: 10px;"></div>
+  
+    <mat-card-content>
+  
+  
+      <form  (keydown.enter)="$event.preventDefault()" [formGroup]="customerForm">
+  
+        <div class="flex-container">
+          <div style="flex-grow: 0;">
+            <mat-form-field class="form-field" appearance="outline">
+              <mat-label>Codigo Colaborador</mat-label>
+              <input #myDescripcion  readonly="false" matInput formControlName="idCollaborator" placeholder="Codigo Colaborador">
+
+            </mat-form-field>
+                   
+  
+          </div>
+          <div class="example-button-row" style="margin-top: 14px;">
+              <button mat-raised-button  (click)="findCollaborator()" >Buscar</button>
+          </div>   
+  
+        </div>
+
+  
+      <div class="flex-container">
+        <div style="flex-grow: 1;">
+          <mat-form-field class="form-field" appearance="outline">
+            <mat-label>nombres</mat-label>
+            <input readonly="true" matInput formControlName="names"  placeholder="Nombres">
+          </mat-form-field>
+        </div>
+      </div>
+  
+      <div class="flex-container">
+        <div style="flex-grow: 1;">
+          <mat-form-field class="form-field" appearance="outline">
+            <mat-label>Apellidos</mat-label>
+            <input readonly="true" matInput formControlName="lastName" placeholder="Apellidos">
+          </mat-form-field>
+        </div>
+      </div>
+      <div style="height: 10px;"></div>
+
+      <mat-form-field class="example-form-field" appearance="outline" style="margin-left: 5px;">
+        <mat-label>Fecha de disponibilidad</mat-label>
+        <input matInput [matDatepicker]="datepicker" />
+        <mat-hint>DD/MM/YYYY</mat-hint>
+        <mat-datepicker-toggle matIconSuffix [for]="datepicker"></mat-datepicker-toggle>
+        <mat-datepicker #datepicker>
+          <mat-datepicker-actions>
+            <button mat-button matDatepickerCancel>Cancel</button>
+            <button mat-raised-button matDatepickerApply>Apply</button>
+          </mat-datepicker-actions>
+        </mat-datepicker>
+      </mat-form-field>      
+      <div style="height: 10px;"></div>
+  
+
+  
+      <br>
+        <shared-toolbar-save-quit [_disabledSaveUpdate]="!customerForm.valid" [_flagCreate]="_createRegister"
+         (_save)="save()"
+         (_update)="update()"
+         (_quit)="quit($event)">
+        </shared-toolbar-save-quit>
+  
+      </form>
+    </mat-card-content>
+  </mat-card>
+  
+  
+
+
+

@@ -17,7 +17,7 @@ import { ConvertFilterSortAgGridToStandartService } from '../../../../utils/Conv
 import { PaginationSortInterface } from '../../../../utils/interfaces/pagination.sort.interface';
 import { MessagesService } from '../../../shared/messages/messages.service';
 
-import { TipoViaInterface } from './collaborator.interface';
+import { CollaboratorInterface } from './collaborator.interface';
 
 import { DatasourcePaginationInterface } from '../../../shared/interfaces/datasource-pagination-interface';
 import { ErrorInterface } from '../../../../utils/interfaces/errorInterface';
@@ -46,7 +46,7 @@ export default class  TipoViaComponent {
   countOnPagination:number=0;
 
 
-  rowData!:TipoViaInterface[] ;
+  rowData!:CollaboratorInterface[] ;
 
   loadingCellRendererParams = { loadingMessage: 'One moment please...' };
   loadingOverlayComponentParams = {loadingMessage: 'One moment please...'};
@@ -85,7 +85,7 @@ export default class  TipoViaComponent {
   private paginationService = inject(PaginationService);
   private convertFilterSortAgGridToStandartService = inject(ConvertFilterSortAgGridToStandartService);
   private messagesService = inject(MessagesService);
-  private crudService = inject(CrudService<TipoViaInterface>);
+  private crudService = inject(CrudService<CollaboratorInterface>);
 
 
   disabledEdit: boolean=false;
@@ -101,7 +101,7 @@ export default class  TipoViaComponent {
 
 
 
-  onGridReady(params: GridReadyEvent<TipoViaInterface>) {
+  onGridReady(params: GridReadyEvent<CollaboratorInterface>) {
 
     this.gridParams = params;
     this.gridApi = params.api;

@@ -10,6 +10,7 @@ export const MENU_DATA_PRIME = [
             label: 'Disponibles',
             shortcut: '⌘+N',
             icon: 'pi pi-wifi',
+            routerLink: 'training-register-collaborator'
 
         },
         {

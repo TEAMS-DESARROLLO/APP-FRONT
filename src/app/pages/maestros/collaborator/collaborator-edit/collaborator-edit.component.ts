@@ -9,7 +9,7 @@ import { ToolbarSaveQuitComponent } from "../../../shared/toolbar-save-quit/tool
 import { distinctUntilChanged } from 'rxjs';
 import { Router, ActivatedRoute, UrlTree } from '@angular/router';
 import { CrudService } from '../../../../providers/crud.service';
-import { TipoViaInterface } from '../collaborator-pagination/collaborator.interface';
+import { CollaboratorInterface } from '../collaborator-pagination/collaborator.interface';
 import { OnExit } from '../../../../guards/exit.guard';
 import { MessagesService } from '../../../shared/messages/messages.service';
 import { DataSoureDropDownComboInterface } from '../../../shared/interfaces/datasource-dropdown-interface';
@@ -32,7 +32,7 @@ export default class CollaboratorEditComponent implements OnExit {
 
   @ViewChild('myDescripcion') inputElement?: ElementRef;
 
-  private crudService = inject(CrudService<TipoViaInterface>);
+  private crudService = inject(CrudService<CollaboratorInterface>);
   private messagesService = inject(MessagesService);
   private commonsService = inject(CommonsService);
 

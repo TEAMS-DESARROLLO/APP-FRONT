@@ -22,10 +22,12 @@ export const routes: Routes = [
             loadComponent : () => import('./pages/demo/demo.component'),
 
           },
+
+          //Operaciones
           {
-            path : 'tipo-documento-identidad',
-            title: 'tipo doc iden',
-            loadComponent : () => import('./pages/maestros/tipo-documento-identidad/tipo-documento-identidad-pagination/tipo-documento-identidad.component'),
+            path : 'training-register-collaborator',
+            title: 'Registro',
+            loadComponent : () => import('./pages/operaciones/training/register/register.component'),
           },
           {
             path : 'tipo-documento-identidad-edit/:idTipoDocumentoIdentidad',
