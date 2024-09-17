@@ -164,6 +164,12 @@ export const routes: Routes = [
             loadComponent : () => import('./pages/maestros/collaborator/collaborator-edit/collaborator-edit.component'),
             canDeactivate : [exitGuard]
           },
+          {
+            path : 'usuarios',
+            title: 'Usuarios',
+            loadComponent : () => import('./pages/sistema/usuario-pagination/usuario-pagination.component'),
+            canDeactivate : [exitGuard]
+          },
         ]
 
       }

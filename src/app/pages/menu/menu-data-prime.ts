@@ -104,6 +104,17 @@ export const MENU_DATA_PRIME = [
         },
     ]
   },
+  {
+    label: "Sistema",
+    items: [
+          {
+            label: 'Usuarios',            
+            icon: 'pi pi-user',
+            shortcut: '⌘+S',
+            routerLink: 'usuarios'
+          }
+    ]
+  }
 
 ]
 
