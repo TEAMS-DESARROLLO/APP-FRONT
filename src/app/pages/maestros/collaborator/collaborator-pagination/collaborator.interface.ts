@@ -12,4 +12,6 @@ export interface CollaboratorInterface {
   regionDescription:string
   idFunctionalLeader:string
   functionalLeaderNames:string
+  idPractice:string
+  practiceDescription:string
 }

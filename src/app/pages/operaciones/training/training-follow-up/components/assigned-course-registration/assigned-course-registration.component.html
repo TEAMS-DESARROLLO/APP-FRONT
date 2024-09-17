@@ -1,0 +1,22 @@
+<div class="flex-container">
+
+
+
+
+  <ag-grid-angular
+      style="width: 100%; height: 300px;"
+      [class]="themeClass"
+      [rowData]="rowData"
+      [columnDefs]="colDefs"
+
+      [context]="context"
+      [enableCellTextSelection]=true
+
+      (selectionChanged)="onSelectionChanged($event)"
+
+      [loadingCellRendererParams]="loadingCellRendererParams"
+      [loadingOverlayComponentParams]="loadingOverlayComponentParams"
+
+      ></ag-grid-angular>
+
+</div>

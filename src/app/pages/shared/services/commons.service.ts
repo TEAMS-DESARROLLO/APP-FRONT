@@ -55,7 +55,7 @@ export class CommonsService {
     );
     return [];
 
-  }  
+  }
 
   loadFunctionalLeaderForComboWithLabel(){
     let dataArray:DataSoureDropDownComboInterface[]=[];
@@ -92,7 +92,7 @@ export class CommonsService {
     );
     return [];
 
-  }    
+  }
 
   loadRolForComboWithLabel(){
     let dataArray:DataSoureDropDownComboInterface[]=[];
@@ -129,7 +129,7 @@ export class CommonsService {
     );
     return [];
 
-  }  
+  }
 
   loadLeaderForCombo(){
     let dataArray:DataSoureDropDownComboInterface[]=[];
@@ -202,7 +202,7 @@ export class CommonsService {
           let data = res ;
           data.forEach( element => {
             const dato:DataSoureDropDownComboInterface = {
-              "value" : element.idCommunity,
+              "value" : element.idPractice,
               "viewValue" : element.description
             }
 

@@ -1,0 +1,65 @@
+<form [formGroup]="customerForm">
+
+  <div class="flex-container">
+    <div style="flex-grow: 2;">
+      <mat-form-field class="form-field" appearance="outline">
+        <mat-label>Tema revisado</mat-label>
+        <input   matInput value="" placehoder="Tema revisado" formControlName="temaRevisado" >
+      </mat-form-field>
+    </div>
+
+    <div style="flex-grow: 0; ">
+      <mat-form-field class="form-field" appearance="outline">
+        <mat-label>Hrs dedicadas</mat-label>
+        <input type="number"   matInput value="" placeholder="Hrs dedicadas" formControlName="hrsDedicadas">
+      </mat-form-field>
+    </div>
+
+    <div style="flex-grow: 0;">
+      <mat-form-field class="form-field" appearance="outline">
+        <mat-label>Min dedicados</mat-label>
+        <input type="number" matInput value=""  placeholder="Min. dedicados" formControlName="minDedicadas">
+      </mat-form-field>
+    </div>
+
+    <div style="flex-grow: 0;">
+        <mat-form-field class="example-form-field" appearance="outline" style="margin-left: 5px;">
+          <mat-label>Fecha de dedicacion</mat-label>
+          <input matInput [matDatepicker]="datepicker"  formControlName="dateImputation"  id="dateImputation"/>
+
+          <mat-datepicker-toggle matIconSuffix [for]="datepicker"></mat-datepicker-toggle>
+          <mat-datepicker #datepicker>
+            <mat-datepicker-actions>
+              <button mat-button matDatepickerCancel>Cancel</button>
+              <button  mat-raised-button matDatepickerApply >Apply</button>
+            </mat-datepicker-actions>
+          </mat-datepicker>
+        </mat-form-field>
+    </div>
+
+
+  </div>
+
+
+  <div class="flex-container">
+
+      <div style="flex-grow: 1;">
+        <mat-form-field class="form-field" appearance="outline">
+          <mat-label>Comentario</mat-label>
+          <textarea SpellCheck="false" id="textAreaObservacion" #myDescripcion rows="5" matInput formControlName="comment" ></textarea>
+        </mat-form-field>
+      </div>
+
+
+  </div>
+
+    <section>
+      <div class="example-button-row">
+        <button  mat-raised-button (click) ="agregarImputacion()" >Agregar Dedicacion</button>
+      </div>
+  </section>
+
+
+</form>
+
+

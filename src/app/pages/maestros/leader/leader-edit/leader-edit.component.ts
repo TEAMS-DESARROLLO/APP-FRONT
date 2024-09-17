@@ -45,7 +45,7 @@ export default class LeaderEditComponent implements OnExit {
   get f() { return this.customerForm.controls; }
   customerForm:FormGroup = this.fb.group({
     idLeader: ['0', Validators.required],
-    idCommunity: ['', Validators.required],
+    idPractice: ['', Validators.required],
     names: ['', Validators.required],
 
   });
@@ -53,7 +53,7 @@ export default class LeaderEditComponent implements OnExit {
 
 
   get idCommunityForm (){
-    return this.customerForm.get('idCommunity') as FormControl;
+    return this.customerForm.get('idPractice') as FormControl;
   }
 
   constructor(private fb: FormBuilder,

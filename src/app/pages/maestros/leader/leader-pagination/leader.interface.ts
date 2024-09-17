@@ -1,7 +1,7 @@
 export interface LeaderInterface {
   idLeader:string,
-  idCommunity:string,
-  CommunityDescription:string,
+  idPractice:string,
+  practiceDescription:string,
   names:string
 
 }

@@ -4,29 +4,44 @@
       <mat-card-title><h3>{{title}}</h3>  </mat-card-title>
     </mat-card-header>
     <div style="margin-bottom: 10px;"></div>
-  
+
     <mat-card-content>
-  
-  
+
+
       <form  (keydown.enter)="$event.preventDefault()" [formGroup]="customerForm">
-  
+
         <div class="flex-container">
           <div style="flex-grow: 0;">
             <mat-form-field class="form-field" appearance="outline">
               <mat-label>Codigo Colaborador</mat-label>
-              <input #myDescripcion  readonly="false" matInput formControlName="idCollaborator" placeholder="Codigo Colaborador">
-
+              <input readonly="true" #myDescripcion  readonly="false" matInput formControlName="idCollaborator" placeholder="Codigo Colaborador">
             </mat-form-field>
-                   
-  
           </div>
-          <div class="example-button-row" style="margin-top: 14px;">
-              <button mat-raised-button  (click)="findCollaborator()" >Buscar</button>
-          </div>   
-  
+
+          <div class="example-button-row" style="margin-top: 10px; margin-right: 107px;">
+
+              <button mat-flat-button (click)="showCollaborator()">
+                <mat-icon>person_outline</mat-icon>
+                Colaborador
+              </button>
+          </div>
+          <div style="flex-grow: 2; margin-left: 38px;">
+            <mat-form-field class="form-field" appearance="outline">
+              <mat-label>Region</mat-label>
+              <input #myDescripcion  readonly="false" matInput formControlName="regionDescription" placeholder="Region">
+            </mat-form-field>
+          </div>
+        </div>
+      <div class="flex-container">
+        <div style="flex-grow: 1;">
+          <mat-form-field class="form-field" appearance="outline">
+            <mat-label>Comunidad</mat-label>
+            <input readonly="true" matInput formControlName="communityDescription"  placeholder="Nombres">
+          </mat-form-field>
         </div>
 
-  
+      </div>
+
       <div class="flex-container">
         <div style="flex-grow: 1;">
           <mat-form-field class="form-field" appearance="outline">
@@ -34,13 +49,28 @@
             <input readonly="true" matInput formControlName="names"  placeholder="Nombres">
           </mat-form-field>
         </div>
+        <div style="flex-grow: 2;">
+            <mat-form-field class="form-field" appearance="outline">
+              <mat-label>Apellidos</mat-label>
+              <input readonly="true" matInput formControlName="lastName" placeholder="Apellidos">
+            </mat-form-field>
+          </div>
       </div>
-  
+
       <div class="flex-container">
         <div style="flex-grow: 1;">
           <mat-form-field class="form-field" appearance="outline">
-            <mat-label>Apellidos</mat-label>
-            <input readonly="true" matInput formControlName="lastName" placeholder="Apellidos">
+            <mat-label>Lider de practica</mat-label>
+            <input readonly="true" matInput formControlName="leaderNames" placeholder="Lider de practica">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="flex-container">
+        <div style="flex-grow: 1;">
+          <mat-form-field class="form-field" appearance="outline">
+            <mat-label>Funcional/Gestor</mat-label>
+            <input readonly="true" matInput formControlName="functionalLeaderNames" placeholder="funcional/gestor">
           </mat-form-field>
         </div>
       </div>
@@ -48,7 +78,7 @@
 
       <mat-form-field class="example-form-field" appearance="outline" style="margin-left: 5px;">
         <mat-label>Fecha de disponibilidad</mat-label>
-        <input matInput [matDatepicker]="datepicker" />
+        <input matInput [matDatepicker]="datepicker" formControlName="dateAdmission" />
         <mat-hint>DD/MM/YYYY</mat-hint>
         <mat-datepicker-toggle matIconSuffix [for]="datepicker"></mat-datepicker-toggle>
         <mat-datepicker #datepicker>
@@ -57,23 +87,40 @@
             <button mat-raised-button matDatepickerApply>Apply</button>
           </mat-datepicker-actions>
         </mat-datepicker>
-      </mat-form-field>      
+      </mat-form-field>
       <div style="height: 10px;"></div>
-  
 
-  
+
+
       <br>
         <shared-toolbar-save-quit [_disabledSaveUpdate]="!customerForm.valid" [_flagCreate]="_createRegister"
          (_save)="save()"
          (_update)="update()"
          (_quit)="quit($event)">
         </shared-toolbar-save-quit>
-  
+
       </form>
     </mat-card-content>
   </mat-card>
-  
-  
+
+  <div >
+    <p-dialog [focusTrap]="false"
+        header="BUSCAR COLABORADOR"
+        position = "center"
+        [modal]="true"
+        [(visible)]="visible"
+        [style]="{ width: '90%', height: '50rem' }"
+
+        [autoZIndex] = "true"
+        [maximizable]="true">
+          @if (this.visible) {
+            <app-collaborator [_seekingBehavior]="this.seekingBehavior" (_select)="getIdCollaborator($event)" (_quit)="closeModal()"  ></app-collaborator>
+
+
+          }
+      </p-dialog>
+  </div>
+
 
 
 

@@ -1,5 +1,5 @@
 export interface CommunityInterface {
-  idCommunity:string,
+  idPractice:string,
   descripcion:string,
   estado:string
 }

@@ -64,7 +64,7 @@ export default class  CommunityComponent {
   };
 
   colDefs: ColDef[] = [
-    { field: "idCommunity", headerName :"Codigo", checkboxSelection: true, filter:true, },
+    { field: "idPractice", headerName :"Codigo", checkboxSelection: true, filter:true, },
     { field: "description", headerName: "Descripcion", filter:true, flex:1 },
 
   ];
@@ -78,6 +78,8 @@ export default class  CommunityComponent {
 
   disabledEdit: boolean=false;
   disabledDelete: boolean=false;
+
+  diabledSelect : boolean = false;
 
   dataPagination:any;
 
@@ -156,7 +158,7 @@ export default class  CommunityComponent {
     if(rowData.length == 0){
       return;
     }
-    let id = rowData[0].idCommunity;
+    let id = rowData[0].idPractice;
     this.router.navigate(['community-edit', id], { relativeTo: this.activeRouter.parent });
   }
   delete(){
@@ -164,7 +166,7 @@ export default class  CommunityComponent {
     if(rowData.length == 0){
       return;
     }
-    let id = rowData[0].idCommunity;
+    let id = rowData[0].idPractice;
 
     this.messagesService.message_question("warning","Cuidado!","Estas seguros de eliminar el registro " + id,"Si, Estoy seguro","No, cancelar")
     .then(
@@ -200,23 +202,14 @@ export default class  CommunityComponent {
 
   }
   reload(){
-    //this.gridApi.refreshInfiniteCache();
-    //this.onGridReady( this.gridParams );
-    //this.gridApi.redrawRows();
-    //debugger
-    //this.gridApi.infinitePageRowModel.resetCache();
+
     this.gridOptions.cacheBlockSize = 10;
     this.gridApi.infiniteRowModel.resetCache();
     this.gridApi.paginationPageSize = 10;
   }
 
   onPaginationChanged(e:any) {
-    //debugger
-    //this.gridApi.cacheBlockSize = e.size;
-    //// this is a way to use private fields in typescript
-        //const api: any = this.gridApi;
 
-        //this.gridApi.paginationPageSize = e.size;
 
 
     try {
@@ -245,9 +238,11 @@ export default class  CommunityComponent {
     if(this.gridApi.getSelectedRows().length > 0){
       this.disabledEdit = true;
       this.disabledDelete = true;
+      this.diabledSelect= true;
     }else{
       this.disabledEdit = false;
       this.disabledDelete = false;
+      this.diabledSelect = false;
     }
   }
 

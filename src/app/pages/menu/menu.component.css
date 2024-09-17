@@ -20,17 +20,23 @@ mat-sidenav {
 
 .mat-drawer-inner-container::-webkit-scrollbar {
   display: none;
+  z-index: -1;
+}
+.mat-drawer.mat-drawer-side {
+  z-index: -1;
 }
 
 .content {
-  height: calc(100vh - 140px);
+  /* height: calc(100vh - 140px); */
+  height: 100%;
   border-radius: 10px;
   margin: 16px;
   margin-left: 32px;
-  background: #616161;
+  /* background: #616161; */
+  background-attachment: fixed;
   padding: 16px;
 
-  overflow: auto;
+  /* overflow: auto; */
 }
 
 

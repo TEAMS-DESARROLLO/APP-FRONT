@@ -1,83 +1,136 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 
 import { environment } from '../../environments/environment';
 import { Observable, catchError, throwError } from 'rxjs';
 import { MessagesService } from '../pages/shared/messages/messages.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CrudService<T> {
+  private messagesService = inject(MessagesService);
 
-  private httpHeaders = new HttpHeaders({ 'Content-Type': 'application/json' })
-  constructor(private http:HttpClient) { }
+  private httpHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
+  constructor(private http: HttpClient) {}
 
-  create(controller:string,evento:string, model:any):Observable<T>   {
-    let url = environment.protocol+environment.host+environment.port+'/'+environment.context+controller+"/"+evento;
+  create(controller: string, evento: string, model: any): Observable<T> {
+    let url =
+      environment.protocol +
+      environment.host +
+      environment.port +
+      '/' +
+      environment.context +
+      controller +
+      '/' +
+      evento;
 
-    return this.http.post<T>(url, model, {headers:this.httpHeaders}).pipe(
-      catchError( e=> {
+    return this.http.post<T>(url, model, { headers: this.httpHeaders }).pipe(
+      catchError((e) => {
         console.error(e.error.mensaje);
-        return throwError( () => e.error);
-      } )
+        return throwError(() => e.error);
+      })
     );
   }
 
-  readById(controller:string,evento:string,id:any):Observable<T>  {
-    const eventoFill = evento.length > 0 ? evento + "/" : "";
-    let url = environment.protocol+environment.host +environment.port +'/'+ environment.context+controller + eventoFill;
+  readById(controller: string, evento: string, id: any): Observable<T> {
+    const eventoFill = evento.length > 0 ? '/'  + evento  : '';
+    let url =
+      environment.protocol +
+      environment.host +
+      environment.port +
+      '/' +
+      environment.context +
+      controller +
+      eventoFill;
 
-    let endPoint = `${url}/${id}`
+    if (id == undefined) id = '';
+    if (typeof id === 'number') {
+      id = id.toString();
+    }
+    let slash = id.length > 0 ? '/' : '';
+    let endPoint = `${url}${slash}${id}`;
+
+    //let endPoint = `${url}/${id}`;
 
     return this.http.get<T>(endPoint).pipe(
-      catchError( e=> {
+      catchError((e) => {
         console.error(e.error.mensaje);
-        return throwError( () => e.error);
-      } )
+        this.messagesService.message_error('Atencion', e.error.message);
+        return throwError(() => e.error);
+      })
     );
-
   }
 
-  update(controller:string,evento:string,model:any,id:any):Observable<T>  {
-    const eventoFill = evento.length > 0 ? evento + "/" : "";
-    let url = environment.protocol+environment.host+environment.port+'/'+ environment.context+controller + eventoFill;
-    let endPoint = `${url}/${id}`
-    return this.http.put<T>(endPoint, model,  {headers:this.httpHeaders}).pipe(
-      catchError( e=> {
+  update(
+    controller: string,
+    evento: string,
+    model: any,
+    id: any
+  ): Observable<T> {
+    const eventoFill = evento.length > 0 ? '/' + evento : '';
 
-        return throwError( () => e.error);
-      } )
-    );
+    let url =
+      environment.protocol +
+      environment.host +
+      environment.port +
+      '/' +
+      environment.context +
+      controller +
+      eventoFill;
 
+    if(id == undefined) id = '';
+    if(typeof id === 'number'){
+      id = id.toString();
+    }
+    let slash = id.length > 0 ? '/' : '';
+    let endPoint = `${url}${slash}${id}`;
+    return this.http
+      .put<T>(endPoint, model, { headers: this.httpHeaders })
+      .pipe(
+        catchError((e) => {
+
+          return throwError(() => e.error);
+        })
+      );
   }
 
-  deleteById(controller:string,evento:string,id:any){
-    const eventoFill = evento.length > 0 ? evento + "/" : "";
-    let url = environment.protocol+environment.host+environment.port+'/'+ environment.context+controller + eventoFill;
-    let endPoint = `${url}/${id}`
+  deleteById(controller: string, evento: string, id: any) {
+    const eventoFill = evento.length > 0 ? evento + '/' : '';
+    let url =
+      environment.protocol +
+      environment.host +
+      environment.port +
+      '/' +
+      environment.context +
+      controller +
+      eventoFill;
+    let endPoint = `${url}/${id}`;
     return this.http.delete<any>(endPoint).pipe(
-      catchError( e=> {
-
+      catchError((e) => {
         //console.log(e.mensaje);
         //this.messagesService.message_error('error','Atencion',)
-        return throwError( () => e.error);
-      } )
-    ) ;
+        return throwError(() => e.error);
+      })
+    );
   }
 
-  getAll(controller:string,evento:string,id:any):Observable<T[]> {
-
-
-    let url = environment.protocol+environment.host+environment.port+'/'+ environment.context+controller +"/" +evento;
-    let endPoint = `${url}`
-    return this.http.get<T[]>(endPoint)
-    .pipe(
-      catchError( e=> {
+  getAll(controller: string, evento: string, id: any): Observable<T[]> {
+    let url =
+      environment.protocol +
+      environment.host +
+      environment.port +
+      '/' +
+      environment.context +
+      controller +
+      '/' +
+      evento;
+    let endPoint = `${url}`;
+    return this.http.get<T[]>(endPoint).pipe(
+      catchError((e) => {
         console.error(e.error.mensaje);
-        return throwError( () => e.error);
-      } )
-    ); ;
+        return throwError(() => e.error);
+      })
+    );
   }
-
 }

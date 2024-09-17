@@ -66,8 +66,8 @@ export default class  TipoViaComponent {
   colDefs: ColDef[] = [
     { field: "idLeader", headerName :"Codigo", checkboxSelection: true, filter:true, },
     { field: "names", headerName: "Nombres", filter:true },
-    { field: "idCommunity", headerName: "id Comunidad", filter:true },
-    { field: "communityDescription", headerName: "Comunidad", filter:true, flex:1 },
+    { field: "idPractice", headerName: "id Practica", filter:true },
+    { field: "practiceDescription", headerName: "Desc. Practica", filter:true, flex:1 },
 
   ];
 
@@ -202,24 +202,13 @@ export default class  TipoViaComponent {
 
   }
   reload(){
-    //this.gridApi.refreshInfiniteCache();
-    //this.onGridReady( this.gridParams );
-    //this.gridApi.redrawRows();
-    //debugger
-    //this.gridApi.infinitePageRowModel.resetCache();
+
     this.gridOptions.cacheBlockSize = 10;
     this.gridApi.infiniteRowModel.resetCache();
     this.gridApi.paginationPageSize = 10;
   }
 
   onPaginationChanged(e:any) {
-    //debugger
-    //this.gridApi.cacheBlockSize = e.size;
-    //// this is a way to use private fields in typescript
-        //const api: any = this.gridApi;
-
-        //this.gridApi.paginationPageSize = e.size;
-
 
     try {
       if(!this.gridApi.paginationGetCurrentPage()){

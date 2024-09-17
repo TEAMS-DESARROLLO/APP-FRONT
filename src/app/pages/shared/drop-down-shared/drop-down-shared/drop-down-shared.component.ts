@@ -44,8 +44,7 @@ export class DropDownSharedComponent implements OnInit, OnChanges{
 
   }
   ngOnChanges(changes: SimpleChanges){
-    //debugger
-    //this._formControl.setValue(1);
+
   }
 
 

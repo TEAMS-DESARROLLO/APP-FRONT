@@ -124,12 +124,12 @@ export default class  RolComponent {
 
         this.gridApi.showLoadingOverlay();
         this.paginationService.getPaginationAgGrid(this.currentPage, countPage, _filtroForBack, _sortForBack , "rol", "pagination")
-        .subscribe( 
+        .subscribe(
           {
             next : (data) => {
-     
+
                setTimeout(() => {
-    
+
                  const rowsThisPage = data.content;
 
                  let lastRow = -1;
@@ -140,16 +140,16 @@ export default class  RolComponent {
                  params.successCallback(rowsThisPage, lastRow);
                  this.gridApi.hideOverlay();
 
-     
+
                }, 100);
-                           
+
             },
             error: (error:ErrorInterface)=>{
 
               this.notificacionesService.showError(error);
               this.gridApi.hideOverlay();
 
-            }            
+            }
           }
 
         )
@@ -211,23 +211,13 @@ export default class  RolComponent {
 
   }
   reload(){
-    //this.gridApi.refreshInfiniteCache();
-    //this.onGridReady( this.gridParams );
-    //this.gridApi.redrawRows();
-    //debugger
-    //this.gridApi.infinitePageRowModel.resetCache();
+
     this.gridOptions.cacheBlockSize = 10;
     this.gridApi.infiniteRowModel.resetCache();
     this.gridApi.paginationPageSize = 10;
   }
 
   onPaginationChanged(e:any) {
-    //debugger
-    //this.gridApi.cacheBlockSize = e.size;
-    //// this is a way to use private fields in typescript
-        //const api: any = this.gridApi;
-
-        //this.gridApi.paginationPageSize = e.size;
 
 
     try {

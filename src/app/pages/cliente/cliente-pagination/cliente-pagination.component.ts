@@ -223,23 +223,14 @@ export default class  ClienteComponent {
 
   }
   reload(){
-    //this.gridApi.refreshInfiniteCache();
-    //this.onGridReady( this.gridParams );
-    //this.gridApi.redrawRows();
-    //debugger
-    //this.gridApi.infinitePageRowModel.resetCache();
+
     this.gridOptions.cacheBlockSize = 10;
     this.gridApi.infiniteRowModel.resetCache();
     this.gridApi.paginationPageSize = 10;
   }
 
   onPaginationChanged(e:any) {
-    //debugger
-    //this.gridApi.cacheBlockSize = e.size;
-    //// this is a way to use private fields in typescript
-        //const api: any = this.gridApi;
 
-        //this.gridApi.paginationPageSize = e.size;
 
 
     try {

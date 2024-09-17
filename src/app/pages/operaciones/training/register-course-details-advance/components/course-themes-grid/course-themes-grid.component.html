@@ -1,0 +1,25 @@
+<div class="flex-container">
+
+  <div style="flex-grow: 1;">
+    <h3>Avance % : {{ this.advancedCourse | number:'1.2-2' }} </h3>
+  <ag-grid-angular
+      style="width: 100%; height: 250px;"
+      [class]="themeClass"
+      [rowData]="rowData"
+      [columnDefs]="colDefs"
+
+      [context]="context"
+      [enableCellTextSelection]=true
+
+      (selectionChanged)="onSelectionChanged($event)"
+      (cellValueChanged)="onCellValueChanged($event)"
+
+      [loadingCellRendererParams]="loadingCellRendererParams"
+      [loadingOverlayComponentParams]="loadingOverlayComponentParams"
+
+
+
+      ></ag-grid-angular>
+
+</div>
+

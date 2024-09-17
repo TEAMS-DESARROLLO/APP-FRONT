@@ -1,0 +1,33 @@
+<div class="flex-container">
+  <div style="flex-grow: 2;">
+    <mat-form-field class="form-field" appearance="outline">
+      <mat-label>Nombre del curso</mat-label>
+      <input readonly="true"    matInput value=""  [(ngModel)]="courseName" value >
+    </mat-form-field>
+  </div>
+
+  <div style="flex-grow: 0; ">
+    <mat-form-field class="form-field" appearance="outline">
+      <mat-label>Fecha Asignacion</mat-label>
+      <input   readonly="true" matInput value="" [(ngModel)]="startDate">
+    </mat-form-field>
+  </div>
+</div>
+
+
+<div class="flex-container">
+  <div style="flex-grow: 0;">
+    <mat-form-field class="form-field" appearance="outline">
+      <mat-label>Duracion Hrs</mat-label>
+      <input readonly="true" matInput value=""  [(ngModel)]="durationCourseHrs">
+    </mat-form-field>
+  </div>
+  <div style="flex-grow: 2;">
+      <mat-form-field class="form-field" appearance="outline">
+        <mat-label>Url</mat-label>
+        <input readonly="true" matInput value="" [(ngModel)]="urlCourse">
+      </mat-form-field>
+    </div>
+</div>
+
+

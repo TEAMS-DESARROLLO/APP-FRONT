@@ -1,1 +1,134 @@
-<p>training-follow-up works!</p>
+
+<mat-card class="max-width">
+
+    <mat-card-header style="margin-left: 5px;">
+      <mat-card-title><h3>{{title}}</h3>  </mat-card-title>
+    </mat-card-header>
+    <span style="font-size: 9px; margin-left: 40px;">id follow : {{ this.customerForm.controls['idRegisterFollow'].value }}</span>
+    <div style="margin-bottom: 10px;"></div>
+
+    <mat-card-content>
+
+
+      <app-info-base-collaborator [_ramdom]="this.numberRamdom"  [_collaboratorInterface]="this.dataCollaborator" ></app-info-base-collaborator>
+
+      <form  (keydown.enter)="$event.preventDefault()" [formGroup]="customerForm">
+
+      <div style="margin-bottom: 30px;"></div>
+
+      <mat-form-field class="example-form-field" appearance="outline" style="margin-left: 5px;">
+        <mat-label>Fecha Inicio Formacion</mat-label>
+        <input matInput [matDatepicker]="datepicker"  formControlName="dateStartFollow"  id="dateStartFollow"/>
+        <!-- <mat-hint>DD/MM/YYYY</mat-hint> -->
+        <mat-datepicker-toggle matIconSuffix [for]="datepicker"></mat-datepicker-toggle>
+        <mat-datepicker #datepicker>
+          <mat-datepicker-actions>
+            <button mat-button matDatepickerCancel>Cancel</button>
+            <button  mat-raised-button matDatepickerApply (click)="changeDateStartFollow($event)" >Apply</button>
+          </mat-datepicker-actions>
+        </mat-datepicker>
+      </mat-form-field>
+
+      <div style="margin-bottom: 10px;"></div>
+
+      <div class="flex-container">
+        <div style="flex-grow: 1;">
+          <mat-form-field class="form-field" appearance="outline">
+            <mat-label>Observacion</mat-label>
+            <textarea SpellCheck="false" id="textAreaObservacion" #myDescripcion rows="5" matInput formControlName="observation" (change)="change($event)" ></textarea>
+          </mat-form-field>
+        </div>
+
+      </div>
+
+
+
+      <div style=" margin-left: 20px; margin-bottom: 8px; margin-top: 20px;">
+        INFORMACION DEL CURSO
+      </div>
+
+
+      <div [formGroup]="courseForm">
+
+        <div class="flex-container">
+          <div style="flex-grow: 1;">
+            <mat-form-field class="form-field"  appearance="outline">
+              <mat-label>Nombre Curso</mat-label>
+              <input matInput formControlName="nameCourse" >
+            </mat-form-field>
+          </div>
+          <div style="flex-grow: 1;">
+              <mat-form-field class="form-field" appearance="outline">
+                <mat-label>Duracion Hrs</mat-label>
+                <input  matInput formControlName="durationHrs" >
+              </mat-form-field>
+          </div>
+          <div style="flex-grow: 1;">
+              <mat-form-field class="form-field" appearance="outline" >
+                <mat-label>url</mat-label>
+                <input  matInput formControlName="url">
+              </mat-form-field>
+          </div>
+
+          <div style="flex-grow: 1;">
+            <mat-form-field class="example-form-field" appearance="outline" style="margin-left: 5px;">
+              <mat-label>Fecha Asignacion curso</mat-label>
+              <input matInput [matDatepicker]="datepicker2"  formControlName="dateStartCourse"  />
+              <mat-datepicker-toggle matIconSuffix [for]="datepicker2"></mat-datepicker-toggle>
+              <mat-datepicker #datepicker2>
+                <mat-datepicker-actions>
+                  <button mat-button matDatepickerCancel>Cancel</button>
+                  <button  mat-raised-button matDatepickerApply >Apply</button>
+                </mat-datepicker-actions>
+              </mat-datepicker>
+            </mat-form-field>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="example-button-row" style="margin-top: 10px; margin-right: 107px;">
+
+          <button mat-flat-button (click)="agregarCurso()" >
+            <mat-icon>note_add</mat-icon>
+            Agregar curso
+          </button>
+      </div>
+
+      <div style="margin-left: 10px; margin-top: 40px; margin-bottom: 10px;">
+        CURSOS ASIGNADOS
+      </div>
+
+      @if (flagShowCourser) {
+        <app-assigned-course-registration (_rowSelectedAssignedCourseRegistration)="showPopupInfoThemesForCourse($event)"   [flagRender]="this.flagRender"  [idFollowUp]="this.customerForm.controls['idRegisterFollow'].value"  ></app-assigned-course-registration>
+      }
+
+      <br>
+
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+
+
+  <div >
+    <p-dialog [focusTrap]="false"
+        header="REGISTRAR AVANCE DE CURSO"
+        position = "center"
+        [modal]="true"
+        [(visible)]="visible"
+        [style]="{ width: '90%', height: '45rem' }"
+
+        [autoZIndex] = "true"
+        [maximizable]="true">
+          @if (this.visible) {
+                    <!-- Informacion del curso -->
+            <app-register-course-details-advance></app-register-course-details-advance>
+          }
+      </p-dialog>
+  </div>
+
+
+
+
+
