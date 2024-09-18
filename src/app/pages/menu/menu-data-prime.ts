@@ -111,7 +111,7 @@ export const MENU_DATA_PRIME = [
             label: 'Usuarios',            
             icon: 'pi pi-user',
             shortcut: '⌘+S',
-            routerLink: 'usuarios'
+            routerLink: 'users'
           }
     ]
   }

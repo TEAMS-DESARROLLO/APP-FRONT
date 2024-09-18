@@ -165,11 +165,17 @@ export const routes: Routes = [
             canDeactivate : [exitGuard]
           },
           {
-            path : 'usuarios',
+            path : 'users',
             title: 'Usuarios',
-            loadComponent : () => import('./pages/sistema/usuario-pagination/usuario-pagination.component'),
+            loadComponent : () => import('./pages/sistema/user-pagination/user-pagination.component'),
             canDeactivate : [exitGuard]
           },
+          {
+            path : 'users-edit/:id',
+            title: 'Usuarios',
+            loadComponent : () => import('./pages/sistema/user-edit/user-edit.component'),
+            canDeactivate : [exitGuard]
+          }
         ]
 
       }
