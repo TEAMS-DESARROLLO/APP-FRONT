@@ -1,4 +1,3 @@
-import { Menu } from "./menu.interface";
 
 
 
@@ -112,6 +111,12 @@ export const MENU_DATA_PRIME = [
             icon: 'pi pi-user',
             shortcut: '⌘+S',
             routerLink: 'users'
+          },
+          {
+            label: 'Roles',            
+            icon: 'pi pi-bolt',
+            shortcut: '⌘+S',
+            routerLink: 'role'
           }
     ]
   }
