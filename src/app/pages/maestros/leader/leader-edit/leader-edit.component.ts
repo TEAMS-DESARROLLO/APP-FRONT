@@ -1,20 +1,19 @@
-import { Component, ElementRef, ViewChild, afterRender, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { ReactiveFormsModule } from '@angular/forms';
-import { MatInputModule } from '@angular/material/input';
+import { Component, ElementRef, ViewChild, inject } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
-import { ToolbarSaveQuitComponent } from "../../../shared/toolbar-save-quit/toolbar-save-quit.component";
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { ActivatedRoute, Router } from '@angular/router';
 import { distinctUntilChanged } from 'rxjs';
-import { Router, ActivatedRoute, UrlTree } from '@angular/router';
-import { CrudService } from '../../../../providers/crud.service';
-import { LeaderInterface } from '../leader-pagination/leader.interface';
 import { OnExit } from '../../../../guards/exit.guard';
-import { MessagesService } from '../../../shared/messages/messages.service';
+import { CrudService } from '../../../../providers/crud.service';
 import { DropDownSharedComponent } from "../../../shared/drop-down-shared/drop-down-shared/drop-down-shared.component";
 import { DataSoureDropDownComboInterface } from '../../../shared/interfaces/datasource-dropdown-interface';
+import { MessagesService } from '../../../shared/messages/messages.service';
 import { CommonsService } from '../../../shared/services/commons.service';
+import { ToolbarSaveQuitComponent } from "../../../shared/toolbar-save-quit/toolbar-save-quit.component";
+import { LeaderInterface } from '../leader-pagination/leader.interface';
 
 
 

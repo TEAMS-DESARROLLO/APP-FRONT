@@ -1,25 +1,24 @@
-import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
-import { OnExit } from '../../../guards/exit.guard';
-import { ActivatedRoute, Router, UrlTree } from '@angular/router';
-import { distinctUntilChanged, Observable } from 'rxjs';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { DropDownSharedComponent } from '../../shared/drop-down-shared/drop-down-shared/drop-down-shared.component';
-import { ToolbarSaveQuitComponent } from '../../shared/toolbar-save-quit/toolbar-save-quit.component';
-import { MatCardModule } from '@angular/material/card';
-import { MatInputModule } from '@angular/material/input';
 import { CommonModule } from '@angular/common';
+import { Component, ElementRef, inject, ViewChild } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { ActivatedRoute, Router } from '@angular/router';
+import { distinctUntilChanged } from 'rxjs';
+import { OnExit } from '../../../guards/exit.guard';
+import { CrudService } from '../../../providers/crud.service';
+import { DropDownSharedMultipleComponent } from "../../shared/drop-down-shared/drop-down-shared-multiple/drop-down-shared-multiple.component";
+import { DataSoureDropDownComboInterface } from '../../shared/interfaces/datasource-dropdown-interface';
 import { MessagesService } from '../../shared/messages/messages.service';
 import { CommonsService } from '../../shared/services/commons.service';
-import { DataSoureDropDownComboInterface } from '../../shared/interfaces/datasource-dropdown-interface';
-import { CrudService } from '../../../providers/crud.service';
-import { LeaderInterface } from '../../maestros/leader/leader-pagination/leader.interface';
+import { ToolbarSaveQuitComponent } from '../../shared/toolbar-save-quit/toolbar-save-quit.component';
 import { UserInterface } from '../user-pagination/user.interface';
 
 @Component({
   selector: 'app-user-edit',
   standalone: true,
-  imports: [CommonModule, MatFormFieldModule, ReactiveFormsModule, MatInputModule, MatCardModule, ToolbarSaveQuitComponent, DropDownSharedComponent],
+  imports: [CommonModule, MatFormFieldModule, ReactiveFormsModule, MatInputModule, MatCardModule, ToolbarSaveQuitComponent, DropDownSharedMultipleComponent],
   templateUrl: './user-edit.component.html',
   styleUrl: './user-edit.component.css'
 })
@@ -36,6 +35,7 @@ export default class UserEditComponent  implements OnExit {
 
   _createRegister:boolean = false;
 
+
   constructor(private fb: FormBuilder,
     private router: Router,
     private activeRouter: ActivatedRoute) { }
@@ -49,7 +49,7 @@ export default class UserEditComponent  implements OnExit {
       }
     )
 
-    this.commonsService.loadCommunityForCombo();
+    this.commonsService.loadRoleForCombo();
 
     this.loadFromServer();
 
@@ -152,5 +152,8 @@ export default class UserEditComponent  implements OnExit {
 
   }
   
-  
+  get idCommunityForm (){
+    return this.customerForm.get('idCommunity') as FormControl;
+  }
+
 }

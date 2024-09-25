@@ -1,26 +1,26 @@
-import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, inject } from '@angular/core';
 
+import { ActivatedRoute, Router } from '@angular/router';
 import { CrudService } from '../../../providers/crud.service';
-import { Router, ActivatedRoute } from '@angular/router';
 
 import { AgGridModule } from 'ag-grid-angular';
-import { ColDef, GridOptions, IGetRowsParams, SelectionChangedEvent, GridReadyEvent, IDatasource } from 'ag-grid-community'
+import { ColDef, GridOptions, GridReadyEvent, IDatasource, IGetRowsParams, SelectionChangedEvent } from 'ag-grid-community';
 
 
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-quartz.css';
 
-import { ToolbarToolboxComponent } from '../../shared/toolbar-toolbox/toolbar-toolbox.component';
 import { PaginationService } from '../../../providers/pagination.service';
 import { ConvertFilterSortAgGridToStandartService } from '../../../utils/ConvertFilterSortAgGridToStandart.service';
 import { PaginationSortInterface } from '../../../utils/interfaces/pagination.sort.interface';
 import { MessagesService } from '../../shared/messages/messages.service';
+import { ToolbarToolboxComponent } from '../../shared/toolbar-toolbox/toolbar-toolbox.component';
 
 import { UserInterface } from './user.interface';
 
-import { DatasourcePaginationInterface } from '../../shared/interfaces/datasource-pagination-interface';
 import { ErrorInterface } from '../../../utils/interfaces/errorInterface';
+import { DatasourcePaginationInterface } from '../../shared/interfaces/datasource-pagination-interface';
 import { NotificationsService } from '../../shared/services/notifications.service';
 
 
@@ -132,7 +132,7 @@ export default class UserPaginationComponent {
         let countPage = this.gridApi.paginationGetPageSize();
 
         this.gridApi.showLoadingOverlay();
-        this.paginationService.getPaginationAgGrid(this.currentPage, countPage, _filtroForBack, _sortForBack, "collaborator", "pagination")
+        this.paginationService.getPaginationAgGrid(this.currentPage, countPage, _filtroForBack, _sortForBack, "user", "pagination")
           .subscribe({
             next: (data) => {
 

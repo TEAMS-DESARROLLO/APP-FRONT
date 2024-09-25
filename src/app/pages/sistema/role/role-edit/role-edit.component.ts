@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, ViewChild, inject } from '@angular/core';
+import { Component, ElementRef, ViewChild, inject, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -30,14 +30,13 @@ export default class RoleEditComponent {
   title = 'ROL ';
   customerForm!: FormGroup;
   _createRegister:boolean = false;
-
+  public _createdAt = signal(String);
 
 
   constructor(private fb: FormBuilder,
     private router: Router,
     private activeRouter: ActivatedRoute,
     ){
-
   }
   onExit () {
 
@@ -113,11 +112,11 @@ export default class RoleEditComponent {
         if(id == "0"){
           this._createRegister = true;
         }else{
-          console.log(">>>>>" , id);
           this._createRegister = false;
           this.crudService.readById("role","",id)
           .subscribe(
             data => {
+              this._createdAt.set(data.createdAt);
               Object.keys(data).forEach(name => {
                 if (this.customerForm.controls[name]) {
                   this.customerForm.controls[name].patchValue(data[name]);
@@ -138,14 +137,15 @@ export default class RoleEditComponent {
         res=> {
           this.customerForm.reset() ;
           this.router.navigate(['role'], { relativeTo: this.activeRouter.parent });
-          this.messagesService.message_ok('Grabado','Regirstro agregado')
+          this.messagesService.message_ok('Grabado','Registro agregado')
         }
       );
   }
 
   update(){
     let data = this.customerForm.value;
-
+    data.createdAt = this._createdAt();
+    console.log("data " , data)
     let id = this.customerForm.get('id')?.value;
     if(id){
       this.crudService.update('role','', data,id )
@@ -165,15 +165,10 @@ export default class RoleEditComponent {
   quit(e:any){
 
     setTimeout(() => {
-      this.router.navigate(['rol'], { relativeTo: this.activeRouter.parent });
+      this.router.navigate(['role'], { relativeTo: this.activeRouter.parent });
 
     }, 500);
 
   }
-
-
-
-
-
 
 }
