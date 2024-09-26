@@ -16,6 +16,11 @@
       <mat-icon>{{_iconDelete}}</mat-icon>
     </button>
 
+    <button *ngIf="_iconChangeShow" [disabled]=!_disabledChange matTooltip={{_iconChangeToolTip}} mat-icon-button color="primary" aria-label="Example icon-button with a heart icon"
+      (click)="changeStatus()">
+      <mat-icon>{{_iconChange}}</mat-icon>
+    </button>
+
     <button *ngIf="_iconPrintShow" matTooltip={{_iconPrintToolTip}} mat-icon-button color="primary" aria-label="Example icon-button with a heart icon"
       (click)="printPdf()">
       <mat-icon>{{_iconPrint}}</mat-icon>

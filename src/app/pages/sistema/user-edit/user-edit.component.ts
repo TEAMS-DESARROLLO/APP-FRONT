@@ -95,19 +95,15 @@ export default class UserEditComponent  implements OnExit {
         }else{
 
           this._createRegister = false;
-          /*this.crudService.readById("user","",id)
+          this.crudService.readById("user","",id)
           .subscribe(
             data => {
               Object.keys(data).forEach(name => {
                 if (this.customerForm.controls[name]) {
-                  this.customerForm.controls[name].patchValue("Geraldo Achuy"); //data[name]
+                  this.customerForm.controls[name].patchValue(data[name]); //data[name]
                 }
               });
-            });*/
-            
-            if (this.customerForm.controls["names"]) {
-              this.customerForm.controls["names"].patchValue("Geraldo Achuy"); //data[name]
-            }
+            })
 
         }
       });

@@ -31,6 +31,7 @@ export default class RoleEditComponent {
   customerForm!: FormGroup;
   _createRegister:boolean = false;
   public _createdAt = signal(String);
+  public _registrationStatus = signal(String);
 
 
   constructor(private fb: FormBuilder,
@@ -117,6 +118,7 @@ export default class RoleEditComponent {
           .subscribe(
             data => {
               this._createdAt.set(data.createdAt);
+              this._registrationStatus.set(data.registrationStatus);
               Object.keys(data).forEach(name => {
                 if (this.customerForm.controls[name]) {
                   this.customerForm.controls[name].patchValue(data[name]);
@@ -145,7 +147,7 @@ export default class RoleEditComponent {
   update(){
     let data = this.customerForm.value;
     data.createdAt = this._createdAt();
-    console.log("data " , data)
+    data.registrationStatus =  this._registrationStatus();
     let id = this.customerForm.get('id')?.value;
     if(id){
       this.crudService.update('role','', data,id )

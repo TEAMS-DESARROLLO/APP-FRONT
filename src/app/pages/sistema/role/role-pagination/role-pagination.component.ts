@@ -70,8 +70,9 @@ export default class RolePaginationComponent {
   colDefs: ColDef[] = [
     { field: "id", headerName :"Id", checkboxSelection: true, filter:true, },
     { field: "name", headerName: "Codigo", filter:true },
-    { field: "description", headerName: "Descripcion", filter:true, flex:1 },
-
+    { field: "description", headerName: "Descripcion", filter:true },
+    { field: "registrationStatus", headerName: "Estado", filter:true, flex:1 },
+    
   ];
 
 
@@ -84,7 +85,7 @@ export default class RolePaginationComponent {
 
   disabledEdit: boolean = false;
   disabledDelete: boolean = false;
-
+  disabledChange: boolean = false;
   dataPagination: any;
 
   private notificacionesService = inject(NotificationsService);
@@ -130,9 +131,12 @@ export default class RolePaginationComponent {
             next : (data) => {
      
                setTimeout(() => {
-    
-                 const rowsThisPage = data.content;
-
+                const rowsThisPage = data.content.map((dato: any) => ({
+                  ...dato,
+                  registrationStatus: dato.registrationStatus === 'A' ? 'Activo' : 'Inactivo'
+                }));
+                 
+                
                  let lastRow = -1;
                  if (data.content.length <= params.endRow) {
                    lastRow = data.totalElements;
@@ -175,6 +179,37 @@ export default class RolePaginationComponent {
     this.router.navigate(['role-edit', id], { relativeTo: this.activeRouter.parent });
   }
 
+  change() {
+    let rowData = this.gridApi.getSelectedRows();
+    if (rowData.length == 0) {
+      return;
+    }
+    let id = rowData[0].id;
+    let data = rowData[0];
+    this.messagesService.message_question("warning", "Cuidado!", "Estas seguros de cambiar el estado del registro " + id, "Si, Estoy seguro", "No, cancelar")
+      .then(
+        res => {
+          if (res) {
+                data.registrationStatus = data.registrationStatus === 'Activo' ? 'I' : 'A';
+                delete data.updatedAt;
+                this.crudService.update('role','', {...data},id )
+                .subscribe({
+                  next: (resp) => {
+                  this.messagesService.message_ok('procesado', 'Actualizacion de estado');
+                  this.reload();
+                  },
+                  error : (error)=> {
+                  this.messagesService.message_error('Atencion', error.message);
+                  }
+                })
+          }
+
+        }
+      )
+      ;
+
+  }
+
   delete() {
     let rowData = this.gridApi.getSelectedRows();
     if (rowData.length == 0) {
@@ -204,9 +239,7 @@ export default class RolePaginationComponent {
         }
       )
       ;
-
   }
-
 
   reload() {
 
@@ -240,10 +273,12 @@ export default class RolePaginationComponent {
   onSelectionChanged($event: SelectionChangedEvent<any, any>) {
     if (this.gridApi.getSelectedRows().length > 0) {
       this.disabledEdit = true;
-      this.disabledDelete = true;
+      this.disabledDelete = false;
+      this.disabledChange = true;
     } else {
       this.disabledEdit = false;
       this.disabledDelete = false;
+      this.disabledChange = false;
     }
   }
 
