@@ -70,17 +70,8 @@ export default class UserPaginationComponent {
   colDefs: ColDef[] = [
     { field: "idUser", headerName :"Codigo", checkboxSelection: true, filter:true, width:100 },
     { field: "names", headerName: "Nombres", filter:true },
-    { field: "role", headerName: "Roles", filter:true },
     { field: "username", headerName: "Usuario", filter:true },
-    /* { field: "idLeader", headerName: "Id Lider", filter:true , width:100},
-    { field: "leaderNames", headerName: "Lider Nombres", filter:true },
-    { field: "idRol", headerName: "id Rol", filter:true , width:100},
-    { field: "rolDescription", headerName: "Rol", filter:true },
-    { field: "idRegion", headerName: "id Region", filter:true , width:100},
-    { field: "regionDescription", headerName: "Region", filter:true },
-    { field: "idFunctionalLeader", headerName: "id Lider Funcional", filter:true , width:100 },
-    { field: "functionalLeaderNames", headerName: "Nombre Lider Funcional", filter:true, width:400 }, */
-
+    { field: "registrationStatus", headerName: "Estado", filter:true }
   ];
 
 
@@ -138,43 +129,10 @@ export default class UserPaginationComponent {
 
 
               setTimeout(() => {
-
-                data = {
-                  "content": [
-                      {
-                          "idUser":"1",
-                          "names" : "Geraldo Achuy",
-                          "role" : "ADMIN,DEVELOPER",
-                          "username" : "gfachuy"
-                      }
-                  ],
-                  "pageable": {
-                      "pageNumber": 0,
-                      "pageSize": 10,
-                      "sort": {
-                          "empty": true,
-                          "sorted": false,
-                          "unsorted": true
-                      },
-                      "offset": 0,
-                      "paged": true,
-                      "unpaged": false
-                  },
-                  "totalPages": 1,
-                  "totalElements": 1,
-                  "last": false,
-                  "size": 10,
-                  "number": 0,
-                  "sort": {
-                      "empty": true,
-                      "sorted": false,
-                      "unsorted": true
-                  },
-                  "numberOfElements": 10,
-                  "first": true,
-                  "empty": false
-              };
-                const rowsThisPage = data.content;
+                const rowsThisPage = data.content.map((dato: any) => ({
+                  ...dato,
+                  registrationStatus: dato.registrationStatus === 'A' ? 'Activo' : 'Inactivo'
+                }));
 
                 let lastRow = -1;
                 if (data.content.length <= params.endRow) {
@@ -248,6 +206,13 @@ export default class UserPaginationComponent {
 
   }
 
+  print(){
+    return null;
+  }
+  
+  printExcel(){
+    return null;
+  }
 
   reload() {
 
@@ -272,10 +237,16 @@ export default class UserPaginationComponent {
 
   }
 
+  onGridPageSizeChanged(size: number): void {
+    this.gridApi.cacheBlockSize = size;
 
-  printExcel() {
-     return null;
-  }
+    const api: any = this.gridApi;
+    api.infinitePageRowModel.resetCache();
+    this.gridApi.paginationPageSize = size;
+
+}
+
+ 
 
 
   onSelectionChanged($event: SelectionChangedEvent<any, any>) {
@@ -289,4 +260,3 @@ export default class UserPaginationComponent {
   }
 
 }
-

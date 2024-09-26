@@ -29,7 +29,7 @@ export default class UserEditComponent  implements OnExit {
   private crudService = inject(CrudService<UserInterface>);
   private messagesService = inject(MessagesService);
   private commonsService = inject(CommonsService);
-  dataCommunity:DataSoureDropDownComboInterface[]=[];
+  dataRole:DataSoureDropDownComboInterface[]=[];
 
   title = 'USUARIO';
 
@@ -45,7 +45,7 @@ export default class UserEditComponent  implements OnExit {
     
     this.commonsService.data$.subscribe(
       res => {
-        this.dataCommunity = res;
+        this.dataRole = res;
       }
     )
 
@@ -63,10 +63,10 @@ export default class UserEditComponent  implements OnExit {
 
   customerForm:FormGroup = this.fb.group({
     idUser: ['0', Validators.required],
-    role: ['', Validators.required],
+    idRol: ['', Validators.required],
     names: ['', Validators.required],
     username: ['', Validators.required],
-
+    password: ['', Validators.required]
   });
 
   upperCase(){
@@ -152,8 +152,41 @@ export default class UserEditComponent  implements OnExit {
 
   }
   
-  get idCommunityForm (){
-    return this.customerForm.get('idCommunity') as FormControl;
+  save(){
+    let data = this.customerForm.value;
+
+    this.crudService.create("user","create",data)
+      .subscribe(
+        res=> {
+          this.customerForm.reset() ;
+          this.router.navigate(['user'], { relativeTo: this.activeRouter.parent });
+          this.messagesService.message_ok('Grabado','Registro agregado')
+        }
+      );
+  }
+
+  update(){
+    let data = this.customerForm.value;
+   // data.createdAt = this._createdAt();
+    console.log("data " , data)
+    let id = this.customerForm.get('id')?.value;
+    if(id){
+      this.crudService.update('user','', data,id )
+        .subscribe({
+          next: (resp) => {
+            this.customerForm.reset() ;
+            this.messagesService.message_ok('Grabado','Regirstro actualizado');
+            this.router.navigate(['user'], { relativeTo: this.activeRouter.parent });
+          },
+          error : (error)=> {
+
+          }
+        })
+    }
+  }
+
+  get idRoleForm (){
+    return this.customerForm.get('idRol') as FormControl;
   }
 
 }
