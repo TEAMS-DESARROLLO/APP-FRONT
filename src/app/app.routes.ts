@@ -1,6 +1,4 @@
 import { Routes } from '@angular/router';
-import { Component } from '@angular/core';
-import DemoComponent from './pages/demo/demo.component';
 import { exitGuard } from './guards/exit.guard';
 export const routes: Routes = [
   {
@@ -174,6 +172,18 @@ export const routes: Routes = [
             path : 'users-edit/:id',
             title: 'Usuarios',
             loadComponent : () => import('./pages/sistema/user-edit/user-edit.component'),
+            canDeactivate : [exitGuard]
+          },
+          {
+            path : 'role',
+            title: 'Rol',
+            loadComponent : () => import('./pages/sistema/role/role-pagination/role-pagination.component'),
+            canDeactivate : [exitGuard]
+          },
+          {
+            path : 'role-edit/:id',
+            title: 'Rol',
+            loadComponent : () => import('./pages/sistema/role/role-edit/role-edit.component'),
             canDeactivate : [exitGuard]
           }
         ]

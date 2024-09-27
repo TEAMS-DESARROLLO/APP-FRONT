@@ -1,1 +1,74 @@
-<p>user-edit works!</p>
+<mat-card class="max-width">
+    <mat-card-header style="margin-left: 5px;">
+      <mat-card-title><h3>{{title}}</h3>  </mat-card-title>
+    </mat-card-header>
+    <div style="margin-bottom: 10px;"></div>
+  
+    <mat-card-content>
+  
+  
+      <form [formGroup]="customerForm" (keydown.enter)="$event.preventDefault()">
+  
+        <div class="flex-container">
+          <div style="flex-grow: 0;">
+            <mat-form-field class="form-field" appearance="outline">
+              <mat-label>Id Usuario</mat-label>
+              <input readonly="true" matInput formControlName="idUsuario" placeholder="Codigo">
+            </mat-form-field>
+  
+          </div>
+  
+        </div>
+  
+        <div class="flex-container" >
+          <div style="flex-grow: 0;">
+            <mat-form-field class="form-field" appearance="outline">
+              <mat-label>Nombres</mat-label>
+              <input matInput formControlName="nombres"  placeholder="Nombres y Apellidos">
+            </mat-form-field>
+          </div>
+        </div>
+  
+        <div class="flex-container" >
+          <div style="flex-grow: 0;">
+    
+            <app-drop-down-shared-multiple _captionLabel="Rol" [_datosInput]="this.dataRole"
+                [_formControl]="idRoleForm"   ></app-drop-down-shared-multiple>
+              
+          </div>
+        </div>
+      
+        <div class="flex-container" >
+          <div style="flex-grow: 0;">
+            <mat-form-field class="form-field" appearance="outline">
+              <mat-label>Usuario</mat-label>
+              <input matInput formControlName="username"  placeholder="Usuario">
+            </mat-form-field>
+          </div>
+        </div>
+        
+          <div class="flex-container" *ngIf="this._flagCreateRegister()" >
+            <div style="flex-grow: 0;">
+              <mat-form-field class="form-field" appearance="outline" >
+                <mat-label>Clave</mat-label>
+                <input [type]="'password'" matInput formControlName="password"  placeholder="Password" >
+              </mat-form-field>
+            </div>
+          </div>
+        
+        
+
+      <br>
+      
+      <shared-toolbar-save-quit  [_disabledSaveUpdate]="!customerForm.valid" [_flagCreate]="_createRegister"
+         (_save)="save()"
+         (_update)="update()"
+         (_quit)="quit($event)">
+        </shared-toolbar-save-quit>
+
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  
+  

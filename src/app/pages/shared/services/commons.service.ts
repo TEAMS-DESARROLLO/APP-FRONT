@@ -1,9 +1,8 @@
 import { Injectable, inject } from '@angular/core';
+import { Subject } from 'rxjs';
 import { CrudService } from '../../../providers/crud.service';
-import { ViaInterface } from '../../maestros/via/via-pagination/via.interface';
 import { DataSoureDropDownComboInterface } from '../interfaces/datasource-dropdown-interface';
 import { MessagesService } from '../messages/messages.service';
-import { Observable, Subject, asyncScheduler, from } from 'rxjs';
 import { CommonsDataInteface } from './commons/service/commons.data.interface';
 
 @Injectable({
@@ -204,6 +203,37 @@ export class CommonsService {
             const dato:DataSoureDropDownComboInterface = {
               "value" : element.idCommunity,
               "viewValue" : element.description
+            }
+
+            dataArray.push(dato);
+
+          } );
+          this.data$.next(dataArray);
+
+        }
+        ,
+        error:(error)=> {
+          this.messagesService.message_error('Atencion',error.message);
+          return [];
+        }
+      }
+    );
+    return [];
+
+  }
+
+
+  loadRoleForCombo(){
+    let dataArray:DataSoureDropDownComboInterface[]=[];
+    this.crudService.getAll("role","findAll",null)
+    .subscribe(
+      {
+        next:(res)=> {
+          let data = res ;
+          data.forEach( element => {
+            const dato:DataSoureDropDownComboInterface = {
+              "value" : element.id,
+              "viewValue" : element.name
             }
 
             dataArray.push(dato);
