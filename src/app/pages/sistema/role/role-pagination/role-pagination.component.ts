@@ -195,7 +195,7 @@ export default class RolePaginationComponent {
                 this.crudService.update('role','', {...data},id )
                 .subscribe({
                   next: (resp) => {
-                  this.messagesService.message_ok('procesado', 'Actualizacion de estado');
+                  this.messagesService.message_ok('procesado', 'Se ha actualizado el estado');
                   this.reload();
                   },
                   error : (error)=> {

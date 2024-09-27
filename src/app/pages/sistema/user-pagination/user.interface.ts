@@ -1,8 +1,7 @@
 export interface UserInterface {
 
-    idUser: string,
-    names: string,
-    role: string,
-    username: string
-    
+    roles:[];
+    nombres: string;
+    username: string;
+    registrationStatus : string;
 }

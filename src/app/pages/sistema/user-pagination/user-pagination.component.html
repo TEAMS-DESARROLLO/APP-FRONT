@@ -3,10 +3,11 @@
 <div class="flex-container">
     <shared-toolbar-toolbox 
       [_disabledEdit]=this.disabledEdit 
-      [_disabledDelete]=this.disabledDelete
+      [_disabledChange]=this.disabledChange
       (_newRegistro)="NewRegistter()"
       (_editRegistro)="edit()"
       (_deleteRegistro)="delete()"
+      (_changeStatus)="change()"
       (_reLoad)="reload()"
       (_printExcel)="printExcel()"
       ></shared-toolbar-toolbox>

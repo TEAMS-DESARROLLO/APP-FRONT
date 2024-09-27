@@ -13,7 +13,7 @@
           <div style="flex-grow: 0;">
             <mat-form-field class="form-field" appearance="outline">
               <mat-label>Id Usuario</mat-label>
-              <input readonly="true" matInput formControlName="idUser" placeholder="Codigo">
+              <input readonly="true" matInput formControlName="idUsuario" placeholder="Codigo">
             </mat-form-field>
   
           </div>
@@ -24,7 +24,7 @@
           <div style="flex-grow: 0;">
             <mat-form-field class="form-field" appearance="outline">
               <mat-label>Nombres</mat-label>
-              <input matInput formControlName="names"  placeholder="Nombres y Apellidos">
+              <input matInput formControlName="nombres"  placeholder="Nombres y Apellidos">
             </mat-form-field>
           </div>
         </div>
@@ -46,15 +46,17 @@
             </mat-form-field>
           </div>
         </div>
-
-        <div class="flex-container" >
-          <div style="flex-grow: 0;">
-            <mat-form-field class="form-field" appearance="outline">
-              <mat-label>Clave</mat-label>
-              <input matInput formControlName="password"  placeholder="Password">
-            </mat-form-field>
+        
+          <div class="flex-container" *ngIf="this._flagCreateRegister()" >
+            <div style="flex-grow: 0;">
+              <mat-form-field class="form-field" appearance="outline" >
+                <mat-label>Clave</mat-label>
+                <input matInput formControlName="password"  placeholder="Password" >
+              </mat-form-field>
+            </div>
           </div>
-        </div>
+        
+        
 
       <br>
       

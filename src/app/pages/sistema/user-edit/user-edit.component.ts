@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, inject, ViewChild } from '@angular/core';
+import { Component, ElementRef, inject, signal, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -30,11 +30,13 @@ export default class UserEditComponent  implements OnExit {
   private messagesService = inject(MessagesService);
   private commonsService = inject(CommonsService);
   dataRole:DataSoureDropDownComboInterface[]=[];
+  
 
   title = 'USUARIO';
 
   _createRegister:boolean = false;
-
+  _flagCreateRegister = signal<boolean>(false);
+  _registrationStatus = signal<string>("");
 
   constructor(private fb: FormBuilder,
     private router: Router,
@@ -52,7 +54,7 @@ export default class UserEditComponent  implements OnExit {
     this.commonsService.loadRoleForCombo();
 
     this.loadFromServer();
-
+    
     setTimeout(() => {
       this.focusInput();
       this.upperCase();
@@ -61,12 +63,12 @@ export default class UserEditComponent  implements OnExit {
 
   }
 
-  customerForm:FormGroup = this.fb.group({
-    idUser: ['0', Validators.required],
-    idRol: ['', Validators.required],
-    names: ['', Validators.required],
+  customerForm: FormGroup = this.fb.group({
+    idUsuario: ['0', Validators.required],
+    roles: ['', Validators.required],
+    nombres: ['', Validators.required],
     username: ['', Validators.required],
-    password: ['', Validators.required]
+    password: ['', this._flagCreateRegister() ? Validators.required : Validators.nullValidator]
   });
 
   upperCase(){
@@ -92,15 +94,18 @@ export default class UserEditComponent  implements OnExit {
         let id = params['id'];
         if(id == "0"){
           this._createRegister = true;
+          this._flagCreateRegister.set(true);
         }else{
 
           this._createRegister = false;
+          this._flagCreateRegister.set(false);
           this.crudService.readById("user","",id)
           .subscribe(
             data => {
+              this._registrationStatus.set(data.registrationStatus);
               Object.keys(data).forEach(name => {
                 if (this.customerForm.controls[name]) {
-                  this.customerForm.controls[name].patchValue(data[name]); //data[name]
+                  this.customerForm.controls[name].patchValue(data[name]);
                 }
               });
             })
@@ -155,7 +160,7 @@ export default class UserEditComponent  implements OnExit {
       .subscribe(
         res=> {
           this.customerForm.reset() ;
-          this.router.navigate(['user'], { relativeTo: this.activeRouter.parent });
+          this.router.navigate(['users'], { relativeTo: this.activeRouter.parent });
           this.messagesService.message_ok('Grabado','Registro agregado')
         }
       );
@@ -163,16 +168,23 @@ export default class UserEditComponent  implements OnExit {
 
   update(){
     let data = this.customerForm.value;
-   // data.createdAt = this._createdAt();
-    console.log("data " , data)
-    let id = this.customerForm.get('id')?.value;
+    
+    let dataUser : UserInterface = {
+      roles: data.roles,
+      nombres: data.nombres,
+      username: data.username,
+      registrationStatus: this._registrationStatus()
+    };
+    
+    console.log("data despues " , data)
+    let id = this.customerForm.get('idUsuario')?.value;
     if(id){
-      this.crudService.update('user','', data,id )
+      this.crudService.update('user/update','', dataUser,id )
         .subscribe({
           next: (resp) => {
             this.customerForm.reset() ;
-            this.messagesService.message_ok('Grabado','Regirstro actualizado');
-            this.router.navigate(['user'], { relativeTo: this.activeRouter.parent });
+            this.messagesService.message_ok('Grabado','Registro actualizado');
+            this.router.navigate(['users'], { relativeTo: this.activeRouter.parent });
           },
           error : (error)=> {
 
@@ -182,7 +194,7 @@ export default class UserEditComponent  implements OnExit {
   }
 
   get idRoleForm (){
-    return this.customerForm.get('idRol') as FormControl;
+    return this.customerForm.get('roles') as FormControl;
   }
 
 }

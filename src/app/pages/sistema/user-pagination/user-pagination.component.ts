@@ -68,8 +68,8 @@ export default class UserPaginationComponent {
   };
 
   colDefs: ColDef[] = [
-    { field: "idUser", headerName :"Codigo", checkboxSelection: true, filter:true, width:100 },
-    { field: "names", headerName: "Nombres", filter:true },
+    { field: "idUsuario", headerName :"Codigo", checkboxSelection: true, filter:true, width:100 },
+    { field: "nombres", headerName: "Nombres", filter:true },
     { field: "username", headerName: "Usuario", filter:true },
     { field: "registrationStatus", headerName: "Estado", filter:true }
   ];
@@ -84,6 +84,7 @@ export default class UserPaginationComponent {
 
   disabledEdit: boolean = false;
   disabledDelete: boolean = false;
+  disabledChange: boolean = false;
 
   dataPagination: any;
 
@@ -170,27 +171,27 @@ export default class UserPaginationComponent {
     if (rowData.length == 0) {
       return;
     }
-    let id = rowData[0].idUser;
+    let id = rowData[0].idUsuario;
     this.router.navigate(['users-edit', id], { relativeTo: this.activeRouter.parent });
   }
 
-  delete() {
+  change(){
     let rowData = this.gridApi.getSelectedRows();
     if (rowData.length == 0) {
       return;
     }
-    let id = rowData[0].idUser;
+    let id = rowData[0].idUsuario;
 
-    this.messagesService.message_question("warning", "Cuidado!", "Estas seguros de eliminar el registro " + id, "Si, Estoy seguro", "No, cancelar")
+    this.messagesService.message_question("warning", "Cuidado!", "Estas seguros de cambiar el estado del registro " + id, "Si, Estoy seguro", "No, cancelar")
       .then(
         res => {
           if (res) {
-
-            this.crudService.deleteById("user", "", id)
+ 
+            this.crudService.update("user/delete", "",null, id)
               .subscribe(
                 {
                   next: (res) => {
-                    this.messagesService.message_ok('procesado', 'Registro Eliminado')
+                    this.messagesService.message_ok('procesado', 'Se ha actualizado el estado')
                     this.reload();
                   },
                   error: (error) => {
@@ -203,6 +204,11 @@ export default class UserPaginationComponent {
         }
       )
       ;
+  }
+
+
+  delete() {
+    
 
   }
 
@@ -253,9 +259,11 @@ export default class UserPaginationComponent {
     if (this.gridApi.getSelectedRows().length > 0) {
       this.disabledEdit = true;
       this.disabledDelete = true;
+      this.disabledChange = true;
     } else {
       this.disabledEdit = false;
       this.disabledDelete = false;
+      this.disabledChange = false;
     }
   }
 
