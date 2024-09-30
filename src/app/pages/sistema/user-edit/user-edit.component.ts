@@ -1,7 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, inject, signal, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, inject, signal, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { MAT_DATE_LOCALE, provideNativeDateAdapter } from '@angular/material/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -14,13 +17,14 @@ import { MessagesService } from '../../shared/messages/messages.service';
 import { CommonsService } from '../../shared/services/commons.service';
 import { ToolbarSaveQuitComponent } from '../../shared/toolbar-save-quit/toolbar-save-quit.component';
 import { UserInterface } from '../user-pagination/user.interface';
-
 @Component({
   selector: 'app-user-edit',
   standalone: true,
-  imports: [CommonModule, MatFormFieldModule, ReactiveFormsModule, MatInputModule, MatCardModule, ToolbarSaveQuitComponent, DropDownSharedMultipleComponent],
+  imports: [CommonModule, MatFormFieldModule, ReactiveFormsModule, MatInputModule, MatCardModule, ToolbarSaveQuitComponent, DropDownSharedMultipleComponent,MatFormFieldModule, MatInputModule, MatDatepickerModule, MatButtonModule],
   templateUrl: './user-edit.component.html',
-  styleUrl: './user-edit.component.css'
+  styleUrl: './user-edit.component.css',
+  providers: [provideNativeDateAdapter(),{ provide: MAT_DATE_LOCALE, useValue: 'en-GB' }],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class UserEditComponent  implements OnExit {
 
@@ -37,7 +41,8 @@ export default class UserEditComponent  implements OnExit {
   _createRegister:boolean = false;
   _flagCreateRegister = signal<boolean>(false);
   _registrationStatus = signal<string>("");
-
+  _date_now = new Date();
+  minDate = new Date();
   constructor(private fb: FormBuilder,
     private router: Router,
     private activeRouter: ActivatedRoute) { }
@@ -68,7 +73,8 @@ export default class UserEditComponent  implements OnExit {
     roles: ['', Validators.required],
     nombres: ['', Validators.required],
     username: ['', Validators.required],
-    password: ['', this._flagCreateRegister() ? Validators.required : Validators.nullValidator]
+    password: ['', this._flagCreateRegister() ? Validators.required : Validators.nullValidator ],
+    expirationDate: ["", Validators.required],
   });
 
   upperCase(){
@@ -104,8 +110,14 @@ export default class UserEditComponent  implements OnExit {
             data => {
               this._registrationStatus.set(data.registrationStatus);
               Object.keys(data).forEach(name => {
-                if (this.customerForm.controls[name]) {
-                  this.customerForm.controls[name].patchValue(data[name]);
+                const control = this.customerForm.get(name);
+                if (control) {
+                  console.log("name", data[name]);
+                  if (name === "expirationDate") {
+                  control.patchValue(this.convertStringToDate(data[name]));
+                  } else {
+                  control.patchValue(data[name]);
+                  }
                 }
               });
             })
@@ -113,6 +125,11 @@ export default class UserEditComponent  implements OnExit {
         }
       });
 
+  }
+
+  convertStringToDate(dateString: string): Date {
+    const [day, month, year] = dateString.split('-').map(part => parseInt(part, 10));
+    return new Date(year, month - 1, day);
   }
 
   quit(e:any){
@@ -156,7 +173,18 @@ export default class UserEditComponent  implements OnExit {
   save(){
     let data = this.customerForm.value;
 
-    this.crudService.create("user","create",data)
+    let dataUser: UserInterface = {
+      roles: data.roles,
+      nombres: data.nombres,
+      username: data.username,
+      registrationStatus: this._registrationStatus(),
+      password: data.password,
+      expirationDate: this.formatDate(data.expirationDate),
+    };
+    
+
+    console.log("data" , dataUser);
+    this.crudService.create("user","create",dataUser)
       .subscribe(
         res=> {
           this.customerForm.reset() ;
@@ -166,14 +194,30 @@ export default class UserEditComponent  implements OnExit {
       );
   }
 
+  formatDate = (date: string): string => {
+    console.log(">>>>>>> ",date);
+    const dateObj = new Date(date);
+    console.log(">>>>>>> ",dateObj);
+    const day = String(dateObj.getDate()).padStart(2, '0');
+    console.log(">>>>>>> ",day);
+    const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+    console.log(">>>>>>> ",month);
+    const year = dateObj.getFullYear();
+    console.log(">>>>>>> ",year);
+    console.log(">>>>>>> ",`${day}-${month}-${year}`);
+    return `${day}-${month}-${year}`;
+  };
+
+
   update(){
     let data = this.customerForm.value;
     
-    let dataUser : UserInterface = {
+    let dataUser: UserInterface = {
       roles: data.roles,
       nombres: data.nombres,
       username: data.username,
-      registrationStatus: this._registrationStatus()
+      registrationStatus: this._registrationStatus(),
+      expirationDate: this.formatDate(data.expirationDate),
     };
     
     console.log("data despues " , data)

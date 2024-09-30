@@ -71,7 +71,8 @@ export default class UserPaginationComponent {
     { field: "idUsuario", headerName :"Codigo", checkboxSelection: true, filter:true, width:100 },
     { field: "nombres", headerName: "Nombres", filter:true },
     { field: "username", headerName: "Usuario", filter:true },
-    { field: "registrationStatus", headerName: "Estado", filter:true }
+    { field: "expirationDate", headerName: "Fecha de expiracion", filter:true },
+    { field: "registrationStatus", headerName: "Estado", filter:true },
   ];
 
 
