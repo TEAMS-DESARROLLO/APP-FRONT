@@ -6,8 +6,10 @@ import { MatCardModule } from '@angular/material/card';
 import { MAT_DATE_LOCALE, provideNativeDateAdapter } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AgGridModule } from 'ag-grid-angular';
 import { ColDef, GridOptions, GridReadyEvent, IDatasource, IGetRowsParams, SelectionChangedEvent } from 'ag-grid-community';
 import { distinctUntilChanged } from 'rxjs';
 import { OnExit } from '../../../guards/exit.guard';
@@ -23,12 +25,13 @@ import { MessagesService } from '../../shared/messages/messages.service';
 import { CommonsService } from '../../shared/services/commons.service';
 import { NotificationsService } from '../../shared/services/notifications.service';
 import { ToolbarSaveQuitComponent } from '../../shared/toolbar-save-quit/toolbar-save-quit.component';
+import { ToolbarToolboxComponent } from '../../shared/toolbar-toolbox/toolbar-toolbox.component';
 import { RolInterface } from '../role/role-pagination/rol.interface';
 import { UserInterface } from '../user-pagination/user.interface';
 @Component({
   selector: 'app-user-edit',
   standalone: true,
-  imports: [CommonModule, MatFormFieldModule, ReactiveFormsModule, MatInputModule, MatCardModule, ToolbarSaveQuitComponent, DropDownSharedMultipleComponent,MatFormFieldModule, MatInputModule, MatDatepickerModule, MatButtonModule],
+  imports: [CommonModule,AgGridModule,ToolbarToolboxComponent,MatFormFieldModule,MatIconModule,ReactiveFormsModule,MatInputModule,MatCardModule,ToolbarSaveQuitComponent,DropDownSharedMultipleComponent,MatFormFieldModule, MatInputModule, MatDatepickerModule, MatButtonModule],
   templateUrl: './user-edit.component.html',
   styleUrl: './user-edit.component.css',
   providers: [provideNativeDateAdapter(),{ provide: MAT_DATE_LOCALE, useValue: 'en-GB' }],
