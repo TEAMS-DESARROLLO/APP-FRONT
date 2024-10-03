@@ -71,7 +71,8 @@ export default class UserPaginationComponent {
     { field: "idUsuario", headerName :"Codigo", checkboxSelection: true, filter:true, width:100 },
     { field: "nombres", headerName: "Nombres", filter:true },
     { field: "username", headerName: "Usuario", filter:true },
-    { field: "registrationStatus", headerName: "Estado", filter:true }
+    { field: "expirationDate", headerName: "Fecha de expiracion", filter:true },
+    { field: "registrationStatus", headerName: "Estado", filter:true },
   ];
 
 
@@ -127,7 +128,7 @@ export default class UserPaginationComponent {
         this.paginationService.getPaginationAgGrid(this.currentPage, countPage, _filtroForBack, _sortForBack, "user", "pagination")
           .subscribe({
             next: (data) => {
-
+              
 
               setTimeout(() => {
                 const rowsThisPage = data.content.map((dato: any) => ({
@@ -181,13 +182,14 @@ export default class UserPaginationComponent {
       return;
     }
     let id = rowData[0].idUsuario;
-
+    let data = rowData[0];
+   
     this.messagesService.message_question("warning", "Cuidado!", "Estas seguros de cambiar el estado del registro " + id, "Si, Estoy seguro", "No, cancelar")
       .then(
         res => {
           if (res) {
- 
-            this.crudService.update("user/delete", "",null, id)
+            data.registrationStatus = data.registrationStatus === 'Activo' ? 'I' : 'A';
+            this.crudService.update("user/update", "", {...data}, id)
               .subscribe(
                 {
                   next: (res) => {
@@ -200,7 +202,7 @@ export default class UserPaginationComponent {
                 }
               );
           }
-
+ 
         }
       )
       ;

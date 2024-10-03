@@ -4,4 +4,6 @@ export interface UserInterface {
     nombres: string;
     username: string;
     registrationStatus : string;
+    password ?: string;
+    expirationDate : string;
 }

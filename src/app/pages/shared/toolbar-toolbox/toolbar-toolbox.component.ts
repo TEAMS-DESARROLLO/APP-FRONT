@@ -30,7 +30,7 @@ export class ToolbarToolboxComponent {
   @Input() _iconNewTooltip='Nuevo Registro';
   @Input() _iconEditToolTip='Editar Registro';
   @Input() _iconDeleteToolTip='Eliminar Registro';
-  @Input() _iconChangeToolTip='Editar Estado';
+  @Input() _iconChangeToolTip='Cambiar Estado';
   @Input() _iconPrintToolTip='Imprimir';
   @Input() _iconExportToolTip='Exportar Excel';
   @Input() _iconLoadToolTip='Re-Load';
