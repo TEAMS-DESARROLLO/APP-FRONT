@@ -67,6 +67,12 @@ export default class UserEditComponent  implements OnExit {
   rowData !: RolInterface[];
 
   colDefs: ColDef[] = [
+    /*{
+      headerName: "Seleccionar", 
+      checkboxSelection: true,
+      headerCheckboxSelection: true,
+      field: "isSelected"
+    },*/
     { field: "id", headerName :"Id", checkboxSelection: true, filter:true, },
     { field: "name", headerName: "Codigo", filter:true }
   ];
@@ -85,7 +91,8 @@ export default class UserEditComponent  implements OnExit {
     suppressHorizontalScroll: false,
 
     paginationPageSizeSelector: [10, 20, 100],
-
+    rowSelection: 'multiple',
+    getRowId: params => params.data.id
 
   };
 
@@ -199,6 +206,20 @@ export default class UserEditComponent  implements OnExit {
                  }
 
                  params.successCallback(rowsThisPage, lastRow);
+                 let flg=0;
+                 console.log(this._createRegister)
+                 if(!this._createRegister)  {
+                  rowsThisPage.forEach((row:any) => {
+                    const roles = this.customerForm.get('roles')?.value;
+                    if (roles && roles.includes(row.id)) {
+                      const node = this.gridApi.getRowNode(row.id.toString()); 
+                      if (node) {
+                        node.setSelected(true); // Seleccionar la fila
+                      }
+                    }
+                  });
+                 }
+                 
                  this.gridApi.hideOverlay();
 
      
