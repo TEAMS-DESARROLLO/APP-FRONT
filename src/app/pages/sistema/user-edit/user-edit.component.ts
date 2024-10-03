@@ -1,24 +1,37 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, inject, signal, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AgGridModule } from 'ag-grid-angular';
+import { ColDef, GridOptions, GridReadyEvent, IDatasource, IGetRowsParams, SelectionChangedEvent } from 'ag-grid-community';
 import { distinctUntilChanged } from 'rxjs';
 import { OnExit } from '../../../guards/exit.guard';
 import { CrudService } from '../../../providers/crud.service';
+import { PaginationService } from '../../../providers/pagination.service';
+import { ConvertFilterSortAgGridToStandartService } from '../../../utils/ConvertFilterSortAgGridToStandart.service';
+import { ErrorInterface } from '../../../utils/interfaces/errorInterface';
+import { PaginationSortInterface } from '../../../utils/interfaces/pagination.sort.interface';
 import { DropDownSharedMultipleComponent } from "../../shared/drop-down-shared/drop-down-shared-multiple/drop-down-shared-multiple.component";
 import { DataSoureDropDownComboInterface } from '../../shared/interfaces/datasource-dropdown-interface';
+import { DatasourcePaginationInterface } from '../../shared/interfaces/datasource-pagination-interface';
 import { MessagesService } from '../../shared/messages/messages.service';
 import { CommonsService } from '../../shared/services/commons.service';
+import { NotificationsService } from '../../shared/services/notifications.service';
 import { ToolbarSaveQuitComponent } from '../../shared/toolbar-save-quit/toolbar-save-quit.component';
+import { ToolbarToolboxComponent } from '../../shared/toolbar-toolbox/toolbar-toolbox.component';
+import { RolInterface } from '../role/role-pagination/rol.interface';
 import { UserInterface } from '../user-pagination/user.interface';
 
 @Component({
   selector: 'app-user-edit',
   standalone: true,
-  imports: [CommonModule, MatFormFieldModule, ReactiveFormsModule, MatInputModule, MatCardModule, ToolbarSaveQuitComponent, DropDownSharedMultipleComponent],
+  imports: [CommonModule,AgGridModule,ToolbarToolboxComponent,MatFormFieldModule,MatIconModule,ReactiveFormsModule,MatInputModule,MatCardModule,ToolbarSaveQuitComponent,DropDownSharedMultipleComponent,MatFormFieldModule, MatInputModule, MatDatepickerModule, MatButtonModule],
   templateUrl: './user-edit.component.html',
   styleUrl: './user-edit.component.css'
 })
@@ -26,9 +39,15 @@ export default class UserEditComponent  implements OnExit {
 
   @ViewChild('myDescripcion') inputElement?: ElementRef;
 
+  themeClass = "ag-theme-quartz-dark";
+
   private crudService = inject(CrudService<UserInterface>);
   private messagesService = inject(MessagesService);
   private commonsService = inject(CommonsService);
+  
+  private convertFilterSortAgGridToStandartService = inject(ConvertFilterSortAgGridToStandartService);
+  private paginationService = inject(PaginationService);
+  private notificacionesService = inject(NotificationsService);
   dataRole:DataSoureDropDownComboInterface[]=[];
   
 
@@ -37,6 +56,44 @@ export default class UserEditComponent  implements OnExit {
   _createRegister:boolean = false;
   _flagCreateRegister = signal<boolean>(false);
   _registrationStatus = signal<string>("");
+  
+  minDate = new Date();
+  
+  arrayRole: DataSoureDropDownComboInterface[] = [];
+
+
+  rowData !: RolInterface[];
+
+  colDefs: ColDef[] = [
+    { field: "id", headerName :"Id", checkboxSelection: true, filter:true, },
+    { field: "name", headerName: "Codigo", filter:true }
+  ];
+  
+  gridParams: any;
+  gridApi: any;
+  currentPage: number = 0;
+
+  gridOptions: GridOptions = {
+
+    pagination: true,
+    rowModelType: 'infinite',
+    maxBlocksInCache: 1,
+    cacheBlockSize: 10,
+    paginationPageSize: 10,
+    suppressHorizontalScroll: false,
+
+    paginationPageSizeSelector: [10, 20, 100],
+
+
+  };
+
+  loadingCellRendererParams = { loadingMessage: 'One moment please...' };
+  loadingOverlayComponentParams = { loadingMessage: 'One moment please...' };
+
+  disabledEdit: boolean = false;
+  disabledDelete: boolean = false;
+  disabledChange: boolean = false;
+  dataPagination: any;
 
   constructor(private fb: FormBuilder,
     private router: Router,
@@ -63,6 +120,104 @@ export default class UserEditComponent  implements OnExit {
 
   }
 
+  onSelectionChanged($event: SelectionChangedEvent<any, any>) {
+    if (this.gridApi.getSelectedRows().length > 0) {
+      this.disabledEdit = true;
+      this.disabledDelete = false;
+      this.disabledChange = true;
+    } else {
+      this.disabledEdit = false;
+      this.disabledDelete = false;
+      this.disabledChange = false;
+    }
+  }
+
+  onPaginationChanged(e: any) {
+
+    try {
+      if (!this.gridApi.paginationGetCurrentPage()) {
+        this.currentPage = 0;
+      } else {
+        this.currentPage = this.gridApi.paginationGetCurrentPage();
+      }
+
+    } catch (error) {
+      this.currentPage = 0;
+    }
+
+  }
+
+  onGridReady(params: GridReadyEvent<RolInterface>) {
+
+    this.gridParams = params;
+    this.gridApi = params.api;
+    const dataSourceAux: DatasourcePaginationInterface = { "content": [], "totalElements": 0 };
+
+    this.setDataSource(dataSourceAux);
+
+
+  }
+
+
+  setDataSource(data: DatasourcePaginationInterface) {
+
+    const dataSource: IDatasource = {
+
+      "rowCount": data.totalElements,
+      "getRows": (params: IGetRowsParams) => {  
+
+        let _filterPage = this.gridApi.getFilterModel();
+        let _agSort: [] = this.gridApi.sortController.getSortModel();
+       let _sortForBack: PaginationSortInterface[] = this.convertFilterSortAgGridToStandartService.ConvertSortToStandar(_agSort);
+        let _filtroForBack: any = this.convertFilterSortAgGridToStandartService.ConvertFilterToStandar(_filterPage);
+ 
+        if (this.gridApi.paginationGetCurrentPage()) {
+          this.currentPage = this.gridApi.paginationGetCurrentPage();
+        }
+
+        let countPage = this.gridApi.paginationGetPageSize();
+
+        this.gridApi.showLoadingOverlay();
+        this.paginationService.getPaginationAgGrid(this.currentPage, countPage, _filtroForBack, _sortForBack, "role", "pagination")
+          .subscribe(
+             
+          {
+            next : (data) => {
+     
+               setTimeout(() => {
+                const rowsThisPage = data.content.map((dato: any) => ({
+                  ...dato,
+                  registrationStatus: dato.registrationStatus === 'A' ? 'Activo' : 'Inactivo'
+                }));
+                 
+                
+                 let lastRow = -1;
+                 if (data.content.length <= params.endRow) {
+                   lastRow = data.totalElements;
+                 }
+
+                 params.successCallback(rowsThisPage, lastRow);
+                 this.gridApi.hideOverlay();
+
+     
+               }, 100);
+                           
+            },
+            error: (error:ErrorInterface)=>{
+
+              //this.notificacionesService.showError(error);
+              this.gridApi.hideOverlay();
+
+            }            
+          }
+
+        )
+
+      }}
+     this.gridApi!.setGridOption('datasource', dataSource);
+
+  }
+
   customerForm: FormGroup = this.fb.group({
     idUsuario: ['0', Validators.required],
     roles: ['', Validators.required],
@@ -70,6 +225,14 @@ export default class UserEditComponent  implements OnExit {
     username: ['', Validators.required],
     password: ['', this._flagCreateRegister() ? Validators.required : Validators.nullValidator]
   });
+
+  addRol(){
+    this.arrayRole = [];
+    let data = this.customerForm.value;
+    let roles = data.roles;
+    this.arrayRole = this.dataRole.filter(role => roles.includes(role.value));
+    console.log('this.arrayRole :', this.arrayRole);
+  }
 
   upperCase(){
     this.customerForm.get('names')?.valueChanges
@@ -81,7 +244,7 @@ export default class UserEditComponent  implements OnExit {
       } );
 
 
-}
+ }
   
   focusInput() {
     this.inputElement?.nativeElement.focus();

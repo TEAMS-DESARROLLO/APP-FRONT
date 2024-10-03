@@ -2,9 +2,9 @@ export const environment = {
   nombreApp : "Entorno Desarrollo",
   protocol:"http://",
   //host:"www.micloud2.com",
-  host:"172.210.178.174",
-  port:":7001",
+  host:"127.0.0.1", //
+  port:":9001",
   context:"",
-  hostGateWay:"172.210.178.174",
-  portGateWay:":7001"
+  hostGateWay:"127.0.0.1",
+  portGateWay:":9001"
 };
