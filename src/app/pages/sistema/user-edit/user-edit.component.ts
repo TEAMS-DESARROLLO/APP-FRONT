@@ -102,9 +102,11 @@ export default class UserEditComponent  implements OnExit {
     this.commonsService.data$.subscribe(
       res => {
         this.dataRole = res;
-        setTimeout(() => {
+        console.log('dataRole', this.dataRole);
+        this.loadgrillaRole();
+        /*setTimeout(() => {
           this.loadgrillaRole();
-        }, 100);
+        }, 100);*/
       }
     )
 
@@ -125,6 +127,8 @@ export default class UserEditComponent  implements OnExit {
       let data = this.customerForm.value;
       let arrayRolesLoad = data.roles;
       this.arrayRole = this.dataRole.filter(role => arrayRolesLoad.includes(role.value));
+      const dataSource: DatasourcePaginationInterface = { "content": [], "totalElements": 0 };
+      this.setDataSource(dataSource);
   }
 
   onSelectionChanged($event: SelectionChangedEvent<any, any>) {
@@ -184,7 +188,8 @@ export default class UserEditComponent  implements OnExit {
 
 
   setDataSource(data: DatasourcePaginationInterface) {
-
+    console.log('entra a cargar la grilla')
+    console.log(this.arrayRole)
     const dataSource: IDatasource = {
 
       "rowCount": this.arrayRole.length,
