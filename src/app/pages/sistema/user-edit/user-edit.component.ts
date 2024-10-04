@@ -125,6 +125,8 @@ export default class UserEditComponent  implements OnExit {
       let data = this.customerForm.value;
       let arrayRolesLoad = data.roles;
       this.arrayRole = this.dataRole.filter(role => arrayRolesLoad.includes(role.value));
+      const dataSourceAux: DatasourcePaginationInterface = { "content": [], "totalElements": 0 };
+      this.setDataSource(dataSourceAux);
   }
 
   onSelectionChanged($event: SelectionChangedEvent<any, any>) {
@@ -171,8 +173,6 @@ export default class UserEditComponent  implements OnExit {
   }
 
   delete() {
-    console.log("delete");
-    console.log(this.gridApi.getSelectedRows());
     const selectedRows = this.gridApi.getSelectedRows();
     this.arrayRole = this.arrayRole.filter(role => !selectedRows.some((selected: { id: string; }) => selected.id === role.value));
 
@@ -256,7 +256,6 @@ export default class UserEditComponent  implements OnExit {
               Object.keys(data).forEach(name => {
                 const control = this.customerForm.get(name);
                 if (control) {
-                  console.log("name", data[name]);
                   if (name === "expirationDate") {
                   control.patchValue(this.convertStringToDate(data[name]));
                   } else {
@@ -315,8 +314,6 @@ export default class UserEditComponent  implements OnExit {
   }
   
   save(){
-    console.log(">>>>>>>>> "  , this.gridApi);
-
     if(this.arrayRole.length>0){
       this.messageErrorGrilla ="";
       let data = this.customerForm.value;
@@ -330,7 +327,6 @@ export default class UserEditComponent  implements OnExit {
         expirationDate: this.formatDate(data.expirationDate),
       };
       
-      console.log("data" , dataUser);
       this.crudService.create("user","create",dataUser)
         .subscribe(
           res=> {
@@ -340,7 +336,7 @@ export default class UserEditComponent  implements OnExit {
           }
         );
     }else{
-      this.messageErrorGrilla = "No se encontraron registros";
+      this.messageErrorGrilla = "*No se ha cargado registros en la grilla";
     }
   }
 
@@ -354,30 +350,36 @@ export default class UserEditComponent  implements OnExit {
 
 
   update(){
-    let data = this.customerForm.value;
+    if(this.arrayRole.length>0){
+      
+      this.messageErrorGrilla ="";
+      let data = this.customerForm.value;
     
-    let dataUser: UserInterface = {
-      roles: data.roles,
-      nombres: data.nombres,
-      username: data.username,
-      registrationStatus: this._registrationStatus(),
-      expirationDate: this.formatDate(data.expirationDate),
-    };
+      let dataUser: UserInterface = {
+        roles: data.roles,
+        nombres: data.nombres,
+        username: data.username,
+        registrationStatus: this._registrationStatus(),
+        expirationDate: this.formatDate(data.expirationDate),
+      };
     
-    console.log("data despues " , data)
-    let id = this.customerForm.get('idUsuario')?.value;
-    if(id){
-      this.crudService.update('user/update','', dataUser,id )
-        .subscribe({
-          next: (resp) => {
-            this.customerForm.reset() ;
-            this.messagesService.message_ok('Grabado','Registro actualizado');
-            this.router.navigate(['users'], { relativeTo: this.activeRouter.parent });
-          },
-          error : (error)=> {
+      let id = this.customerForm.get('idUsuario')?.value;
+      if(id){
+        this.crudService.update('user/update','', dataUser,id )
+          .subscribe({
+            next: (resp) => {
+              this.customerForm.reset() ;
+              this.messagesService.message_ok('Grabado','Registro actualizado');
+              this.router.navigate(['users'], { relativeTo: this.activeRouter.parent });
+            },
+            error : (error)=> {
 
-          }
-        })
+            }
+          })
+      }
+
+    }else{
+      this.messageErrorGrilla = "*No se ha cargado registros en la grilla";
     }
   }
 

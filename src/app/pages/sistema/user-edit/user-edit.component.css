@@ -43,3 +43,8 @@
     width: 30%;
     height: auto;
 }
+
+  .message-error {
+    color: red;
+    font-size: 12px;
+  }
