@@ -1,106 +1,100 @@
 <mat-card class="max-width">
-    <mat-card-header style="margin-left: 5px;">
-      <mat-card-title><h3>{{title}}</h3>  </mat-card-title>
-    </mat-card-header>
-    <div style="margin-bottom: 10px;"></div>
-  
-    <mat-card-content>
-  
-  
-      <form [formGroup]="customerForm" (keydown.enter)="$event.preventDefault()">
-  
-        <div class="flex-container">
-          <div style="flex-grow: 0;">
-            <mat-form-field class="form-field" appearance="outline">
-              <mat-label>Id Usuario</mat-label>
-              <input readonly="true" matInput formControlName="idUsuario" placeholder="Codigo">
-            </mat-form-field>
-  
-          </div>
-        </div>
-  
-        <div class="flex-container left" >
-          <div style="flex-grow: 0;">
-            <mat-form-field class="form-field" appearance="outline">
-              <mat-label>Nombres</mat-label>
-              <input matInput formControlName="nombres"  placeholder="Nombres y Apellidos">
-            </mat-form-field>
-          </div>
-        </div>
-        
-        <div class="flex-container right" >
-          <div style="flex-grow: 0;">
-            <mat-form-field class="form-field" appearance="outline">
-              <mat-label>Usuario</mat-label>
-              <input matInput formControlName="username"  placeholder="Usuario" [readonly]="!this._flagCreateRegister()">
-            </mat-form-field>
-          </div>
-        </div>
+  <mat-card-header style="margin-left: 5px;">
+    <mat-card-title>
+      <h3>{{title}}</h3>
+    </mat-card-title>
+  </mat-card-header>
+  <div style="margin-bottom: 10px;"></div>
 
-        <div class="flex-container right">
-          <mat-form-field >
-            <mat-label>Fecha de vencimiento</mat-label>
-            <input matInput [matDatepicker]="expirationDate" formControlName="expirationDate" [min]="minDate" >
-            <mat-hint>DD/MM/YYYY</mat-hint>
-            <mat-datepicker-toggle matIconSuffix [for]="expirationDate"></mat-datepicker-toggle>
-            <mat-datepicker #expirationDate></mat-datepicker>
+  <mat-card-content>
+    <form [formGroup]="customerForm" (keydown.enter)="$event.preventDefault()">
+
+      <div class="flex-container">
+        <div style="flex-grow: 0;">
+          <mat-form-field class="form-field" appearance="outline">
+            <mat-label>Id Usuario</mat-label>
+            <input readonly="true" matInput formControlName="idUsuario" placeholder="Codigo">
           </mat-form-field>
         </div>
-        
-        <div class="flex-container" *ngIf="this._flagCreateRegister()" >
-          <div style="flex-grow: 0;">
-            <mat-form-field class="form-field" appearance="outline" >
-              <mat-label>Clave</mat-label>
-              <input [type]="'password'" matInput formControlName="password"  placeholder="Password" >
-            </mat-form-field>
-          </div>
-        </div>
+      </div>
 
-        <div class="flex-container" >
-          <div style="flex-grow: 0;">
-    
-            <app-drop-down-shared-multiple _captionLabel="Rol" [_datosInput]="this.dataRole"
-                [_formControl]="idRoleForm"   ></app-drop-down-shared-multiple>
-            
-            <button matTooltip="Grabar" mat-icon-button color="primary" aria-label="Example icon-button with a heart icon" (click)="addRol()">
-              <mat-icon>playlist_add</mat-icon>
-            </button>
-          </div>
+      <div class="flex-container left">
+        <div style="flex-grow: 0;">
+          <mat-form-field class="form-field" appearance="outline">
+            <mat-label>Nombres</mat-label>
+            <input matInput formControlName="nombres" placeholder="Nombres y Apellidos">
+          </mat-form-field>
         </div>
-        
+      </div>
+
+      <div class="flex-container right">
+        <div style="flex-grow: 0;">
+          <mat-form-field class="form-field" appearance="outline">
+            <mat-label>Usuario</mat-label>
+            <input matInput formControlName="username" placeholder="Usuario" [readonly]="!this._flagCreateRegister()">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="flex-container right">
+        <mat-form-field>
+          <mat-label>Fecha de vencimiento</mat-label>
+          <input matInput [matDatepicker]="expirationDate" formControlName="expirationDate" [min]="minDate">
+          <mat-hint>DD/MM/YYYY</mat-hint>
+          <mat-datepicker-toggle matIconSuffix [for]="expirationDate"></mat-datepicker-toggle>
+          <mat-datepicker #expirationDate></mat-datepicker>
+        </mat-form-field>
+      </div>
+
+      <div class="flex-container" *ngIf="this._flagCreateRegister()">
+        <div style="flex-grow: 0;">
+          <mat-form-field class="form-field" appearance="outline">
+            <mat-label>Clave</mat-label>
+            <input [type]="'password'" matInput formControlName="password" placeholder="Password">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="flex-container">
+        <div style="flex-grow: 0;">
+          <app-drop-down-shared-multiple _captionLabel="Rol" [_datosInput]="this.dataRole"
+            [_formControl]="idRoleForm"></app-drop-down-shared-multiple>
+
+          <button matTooltip="Grabar" mat-icon-button color="primary" aria-label="Example icon-button with a heart icon" (click)="addRol()">
+            <mat-icon>playlist_add</mat-icon>
+          </button>
+        </div>
+      </div>
+      <hr>
+      <!-- Agrega la tabla aqu� dentro del mat-card -->
+      <div class="flex-container-grilla">
+        <shared-toolbar-toolbox 
+          [_disabledDelete]="this.disabledDelete"
+          (_deleteRegistro)="delete()">
+        </shared-toolbar-toolbox>
+
+        <ag-grid-angular
+          style="width: 100%; height: 300px;" 
+          [class]="themeClass"
+          [rowData]="rowData"
+          [columnDefs]="colDefs"
+          (gridReady)="onGridReady($event)"
+          (selectionChanged)="onSelectionChanged($event)"
+          (paginationChanged)="onPaginationChanged($event)"
+          [loadingCellRendererParams]="loadingCellRendererParams"
+          [loadingOverlayComponentParams]="loadingOverlayComponentParams"
+          [gridOptions]="gridOptions">
+        </ag-grid-angular>
+      </div>
+
       <br>
-      
-      <shared-toolbar-save-quit  [_disabledSaveUpdate]="!customerForm.valid" [_flagCreate]="_createRegister"
-         (_save)="save()"
-         (_update)="update()"
-         (_quit)="quit($event)">
-        </shared-toolbar-save-quit>
-        <span class="message-error">{{this.messageErrorGrilla}}</span>
-      </form>
-    </mat-card-content>
-  </mat-card>
+      <shared-toolbar-save-quit [_disabledSaveUpdate]="!customerForm.valid" [_flagCreate]="_createRegister"
+        (_save)="save()"
+        (_update)="update()"
+        (_quit)="quit($event)">
+      </shared-toolbar-save-quit>
 
-  <div class="flex-container-grilla">
-    
-    <shared-toolbar-toolbox 
-      [_disabledDelete]=this.disabledDelete
-      (_deleteRegistro)="delete()"
-      ></shared-toolbar-toolbox>
-
-    <ag-grid-angular
-      style="width: 100%; height: 100%;"
-      [class]="themeClass"
-      [rowData]="rowData"
-      [columnDefs]="colDefs"
-      (gridReady)="onGridReady($event)"
-      (selectionChanged)="onSelectionChanged($event)"
-      (paginationChanged)="onPaginationChanged($event)"
-
-      [loadingCellRendererParams]="loadingCellRendererParams"
-      [loadingOverlayComponentParams]="loadingOverlayComponentParams"
-
-      [gridOptions]="gridOptions"
-        >
-    </ag-grid-angular>
-  </div>
-  
+      <span class="message-error">{{this.messageErrorGrilla}}</span>
+    </form>
+  </mat-card-content>
+</mat-card>

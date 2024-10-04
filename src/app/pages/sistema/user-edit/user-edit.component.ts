@@ -102,9 +102,7 @@ export default class UserEditComponent  implements OnExit {
     this.commonsService.data$.subscribe(
       res => {
         this.dataRole = res;
-        setTimeout(() => {
-          this.loadgrillaRole();
-        }, 100);
+        this.loadgrillaRole();
       }
     )
 
@@ -184,7 +182,6 @@ export default class UserEditComponent  implements OnExit {
 
 
   setDataSource(data: DatasourcePaginationInterface) {
-
     const dataSource: IDatasource = {
 
       "rowCount": this.arrayRole.length,
