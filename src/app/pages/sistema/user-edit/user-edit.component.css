@@ -1,4 +1,4 @@
-  .flex-container {
+  .flex-container-grilla {
     display: flex;
     /*flex-direction:row;*/
     /* flex-wrap: wrap; */
@@ -11,7 +11,7 @@
     align-content: stretch;
   }
   
-  .flex-container div {
+  .flex-container-grilla div {
     /*padding: 2px;*/
     /*height: 50px;*/
     margin: 5px;
@@ -31,4 +31,15 @@
     --ag-font-size: 17px;
     --ag-font-family: monospace; */
   }
-  
+  .left {
+    float: left;
+    position: relative;
+    width: 30%;
+    height: auto;
+}
+  .right {
+    position: relative;
+    float: left;
+    width: 30%;
+    height: auto;
+}

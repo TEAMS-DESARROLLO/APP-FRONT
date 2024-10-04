@@ -16,8 +16,6 @@ import { OnExit } from '../../../guards/exit.guard';
 import { CrudService } from '../../../providers/crud.service';
 import { PaginationService } from '../../../providers/pagination.service';
 import { ConvertFilterSortAgGridToStandartService } from '../../../utils/ConvertFilterSortAgGridToStandart.service';
-import { ErrorInterface } from '../../../utils/interfaces/errorInterface';
-import { PaginationSortInterface } from '../../../utils/interfaces/pagination.sort.interface';
 import { DropDownSharedMultipleComponent } from "../../shared/drop-down-shared/drop-down-shared-multiple/drop-down-shared-multiple.component";
 import { DataSoureDropDownComboInterface } from '../../shared/interfaces/datasource-dropdown-interface';
 import { DatasourcePaginationInterface } from '../../shared/interfaces/datasource-pagination-interface';
@@ -56,6 +54,7 @@ export default class UserEditComponent  implements OnExit {
   title = 'USUARIO';
 
   _createRegister:boolean = false;
+  disabledDelete: boolean = false;
   _flagCreateRegister = signal<boolean>(false);
   _registrationStatus = signal<string>("");
   
@@ -67,12 +66,6 @@ export default class UserEditComponent  implements OnExit {
   rowData !: RolInterface[];
 
   colDefs: ColDef[] = [
-    /*{
-      headerName: "Seleccionar", 
-      checkboxSelection: true,
-      headerCheckboxSelection: true,
-      field: "isSelected"
-    },*/
     { field: "id", headerName :"Id", checkboxSelection: true, filter:true, },
     { field: "name", headerName: "Codigo", filter:true }
   ];
@@ -90,20 +83,15 @@ export default class UserEditComponent  implements OnExit {
     paginationPageSize: 10,
     suppressHorizontalScroll: false,
 
-    paginationPageSizeSelector: [10, 20, 100],
-    rowSelection: 'multiple',
-    getRowId: params => params.data.id
-
+    paginationPageSizeSelector: [10, 20, 100]
   };
 
   loadingCellRendererParams = { loadingMessage: 'One moment please...' };
   loadingOverlayComponentParams = { loadingMessage: 'One moment please...' };
 
-  disabledEdit: boolean = false;
-  disabledDelete: boolean = false;
-  disabledChange: boolean = false;
   dataPagination: any;
 
+  messageErrorGrilla : string = "";
   constructor(private fb: FormBuilder,
     private router: Router,
     private activeRouter: ActivatedRoute) { }
@@ -114,6 +102,9 @@ export default class UserEditComponent  implements OnExit {
     this.commonsService.data$.subscribe(
       res => {
         this.dataRole = res;
+        setTimeout(() => {
+          this.loadgrillaRole();
+        }, 100);
       }
     )
 
@@ -126,18 +117,21 @@ export default class UserEditComponent  implements OnExit {
       this.upperCase();
     }, 500);
 
+   
+  }
 
+
+  loadgrillaRole(){
+      let data = this.customerForm.value;
+      let arrayRolesLoad = data.roles;
+      this.arrayRole = this.dataRole.filter(role => arrayRolesLoad.includes(role.value));
   }
 
   onSelectionChanged($event: SelectionChangedEvent<any, any>) {
     if (this.gridApi.getSelectedRows().length > 0) {
-      this.disabledEdit = true;
-      this.disabledDelete = false;
-      this.disabledChange = true;
+      this.disabledDelete = true;
     } else {
-      this.disabledEdit = false;
       this.disabledDelete = false;
-      this.disabledChange = false;
     }
   }
 
@@ -163,8 +157,29 @@ export default class UserEditComponent  implements OnExit {
     const dataSourceAux: DatasourcePaginationInterface = { "content": [], "totalElements": 0 };
 
     this.setDataSource(dataSourceAux);
+    
+  }
 
+  addRol(){
+    this.messageErrorGrilla ="";
+    this.arrayRole = [];
+    let data = this.customerForm.value;
+    let roles = data.roles;
+    this.arrayRole = this.dataRole.filter(role => roles.includes(role.value));
+    const dataSource: DatasourcePaginationInterface = { "content": [], "totalElements": 0 };
+    this.setDataSource(dataSource);
+  }
 
+  delete() {
+    console.log("delete");
+    console.log(this.gridApi.getSelectedRows());
+    const selectedRows = this.gridApi.getSelectedRows();
+    this.arrayRole = this.arrayRole.filter(role => !selectedRows.some((selected: { id: string; }) => selected.id === role.value));
+
+    const dataSource: DatasourcePaginationInterface = { "content": [], "totalElements": 0 };
+    this.setDataSource(dataSource);
+    const control = this.customerForm.get("roles");
+    control?.patchValue(this.arrayRole.map(role => role.value));
   }
 
 
@@ -172,71 +187,25 @@ export default class UserEditComponent  implements OnExit {
 
     const dataSource: IDatasource = {
 
-      "rowCount": data.totalElements,
+      "rowCount": this.arrayRole.length,
       "getRows": (params: IGetRowsParams) => {  
-
-        let _filterPage = this.gridApi.getFilterModel();
-        let _agSort: [] = this.gridApi.sortController.getSortModel();
-       let _sortForBack: PaginationSortInterface[] = this.convertFilterSortAgGridToStandartService.ConvertSortToStandar(_agSort);
-        let _filtroForBack: any = this.convertFilterSortAgGridToStandartService.ConvertFilterToStandar(_filterPage);
- 
+        
         if (this.gridApi.paginationGetCurrentPage()) {
           this.currentPage = this.gridApi.paginationGetCurrentPage();
         }
 
-        let countPage = this.gridApi.paginationGetPageSize();
-
         this.gridApi.showLoadingOverlay();
-        this.paginationService.getPaginationAgGrid(this.currentPage, countPage, _filtroForBack, _sortForBack, "role", "pagination")
-          .subscribe(
-             
-          {
-            next : (data) => {
-     
-               setTimeout(() => {
-                const rowsThisPage = data.content.map((dato: any) => ({
-                  ...dato,
-                  registrationStatus: dato.registrationStatus === 'A' ? 'Activo' : 'Inactivo'
-                }));
-                 
-                
-                 let lastRow = -1;
-                 if (data.content.length <= params.endRow) {
-                   lastRow = data.totalElements;
-                 }
-
+       
+          setTimeout(() => {
+                const rowsThisPage = this.arrayRole.map(role => ({ id: role.value, name: role.viewValue }));
+                 let lastRow = rowsThisPage.length;
                  params.successCallback(rowsThisPage, lastRow);
-                 let flg=0;
-                 console.log(this._createRegister)
-                 if(!this._createRegister)  {
-                  rowsThisPage.forEach((row:any) => {
-                    const roles = this.customerForm.get('roles')?.value;
-                    if (roles && roles.includes(row.id)) {
-                      const node = this.gridApi.getRowNode(row.id.toString()); 
-                      if (node) {
-                        node.setSelected(true); // Seleccionar la fila
-                      }
-                    }
-                  });
-                 }
-                 
                  this.gridApi.hideOverlay();
-
-     
-               }, 100);
+          }, 100);
                            
-            },
-            error: (error:ErrorInterface)=>{
-
-              //this.notificacionesService.showError(error);
-              this.gridApi.hideOverlay();
-
-            }            
-          }
-
-        )
-
+          
       }}
+
      this.gridApi!.setGridOption('datasource', dataSource);
 
   }
@@ -250,13 +219,7 @@ export default class UserEditComponent  implements OnExit {
     expirationDate: ["", Validators.required],
   });
 
-  addRol(){
-    this.arrayRole = [];
-    let data = this.customerForm.value;
-    let roles = data.roles;
-    this.arrayRole = this.dataRole.filter(role => roles.includes(role.value));
-    console.log('this.arrayRole :', this.arrayRole);
-  }
+ 
 
   upperCase(){
     this.customerForm.get('names')?.valueChanges
@@ -352,40 +315,40 @@ export default class UserEditComponent  implements OnExit {
   }
   
   save(){
-    let data = this.customerForm.value;
+    console.log(">>>>>>>>> "  , this.gridApi);
 
-    let dataUser: UserInterface = {
-      roles: data.roles,
-      nombres: data.nombres,
-      username: data.username,
-      registrationStatus: this._registrationStatus(),
-      password: data.password,
-      expirationDate: this.formatDate(data.expirationDate),
-    };
-    
+    if(this.arrayRole.length>0){
+      this.messageErrorGrilla ="";
+      let data = this.customerForm.value;
 
-    console.log("data" , dataUser);
-    this.crudService.create("user","create",dataUser)
-      .subscribe(
-        res=> {
-          this.customerForm.reset() ;
-          this.router.navigate(['users'], { relativeTo: this.activeRouter.parent });
-          this.messagesService.message_ok('Grabado','Registro agregado')
-        }
-      );
+      let dataUser: UserInterface = {
+        roles: data.roles,
+        nombres: data.nombres,
+        username: data.username,
+        registrationStatus: this._registrationStatus(),
+        password: data.password,
+        expirationDate: this.formatDate(data.expirationDate),
+      };
+      
+      console.log("data" , dataUser);
+      this.crudService.create("user","create",dataUser)
+        .subscribe(
+          res=> {
+            this.customerForm.reset() ;
+            this.router.navigate(['users'], { relativeTo: this.activeRouter.parent });
+            this.messagesService.message_ok('Grabado','Registro agregado')
+          }
+        );
+    }else{
+      this.messageErrorGrilla = "No se encontraron registros";
+    }
   }
 
   formatDate = (date: string): string => {
-    console.log(">>>>>>> ",date);
     const dateObj = new Date(date);
-    console.log(">>>>>>> ",dateObj);
     const day = String(dateObj.getDate()).padStart(2, '0');
-    console.log(">>>>>>> ",day);
     const month = String(dateObj.getMonth() + 1).padStart(2, '0');
-    console.log(">>>>>>> ",month);
     const year = dateObj.getFullYear();
-    console.log(">>>>>>> ",year);
-    console.log(">>>>>>> ",`${day}-${month}-${year}`);
     return `${day}-${month}-${year}`;
   };
 
