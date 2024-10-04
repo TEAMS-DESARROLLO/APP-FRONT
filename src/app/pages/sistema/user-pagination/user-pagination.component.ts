@@ -72,7 +72,7 @@ export default class UserPaginationComponent {
     { field: "nombres", headerName: "Nombres", filter:true },
     { field: "username", headerName: "Usuario", filter:true },
     { field: "expirationDate", headerName: "Fecha de expiracion", filter:true },
-    { field: "registrationStatus", headerName: "Estado", filter:true },
+    { field: "statusUser", headerName: "Estado", filter:true },
   ];
 
 
@@ -133,7 +133,7 @@ export default class UserPaginationComponent {
               setTimeout(() => {
                 const rowsThisPage = data.content.map((dato: any) => ({
                   ...dato,
-                  registrationStatus: dato.registrationStatus === 'A' ? 'Activo' : 'Inactivo'
+                  statusUser: dato.statusUser === 1 ? 'Activo' : 'Inactivo'
                 }));
 
                 let lastRow = -1;
@@ -188,8 +188,8 @@ export default class UserPaginationComponent {
       .then(
         res => {
           if (res) {
-            data.registrationStatus = data.registrationStatus === 'Activo' ? 'I' : 'A';
-            this.crudService.update("user/update", "", {...data}, id)
+            data.statusUser = data.statusUser === 'Activo' ? 0 : 1;
+            this.crudService.update("user/update/status-user", "", {...data}, id)
               .subscribe(
                 {
                   next: (res) => {

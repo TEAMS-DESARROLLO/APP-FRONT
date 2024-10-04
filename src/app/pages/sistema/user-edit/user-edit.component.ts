@@ -120,6 +120,7 @@ export default class UserEditComponent  implements OnExit {
 
 
   loadgrillaRole(){
+    console.log("loadgrillaRole... ");
       let data = this.customerForm.value;
       let arrayRolesLoad = data.roles;
       this.arrayRole = this.dataRole.filter(role => arrayRolesLoad.includes(role.value));
@@ -267,9 +268,12 @@ export default class UserEditComponent  implements OnExit {
 
   }
 
-  convertStringToDate(dateString: string): Date {
-    const [day, month, year] = dateString.split('-').map(part => parseInt(part, 10));
-    return new Date(year, month - 1, day);
+  convertStringToDate(dateString: string): any {
+    if(dateString != null){
+      const [day, month, year] = dateString.split('-').map(part => parseInt(part, 10));
+      return new Date(year, month - 1, day);
+    }
+    return "";
   }
 
   quit(e:any){
