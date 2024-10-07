@@ -62,13 +62,14 @@
 
           <button matTooltip="Grabar" mat-icon-button color="primary" aria-label="Example icon-button with a heart icon" (click)="addRol()">
             <mat-icon>playlist_add</mat-icon>
-          </button>
+          </button> 
         </div>
       </div>
       <hr>
       <!-- Agrega la tabla aqu� dentro del mat-card -->
       <div class="flex-container-grilla">
         <shared-toolbar-toolbox 
+          [_disabledNew]="this.disabledNew"
           [_disabledDelete]="this.disabledDelete"
           (_deleteRegistro)="delete()">
         </shared-toolbar-toolbox>
