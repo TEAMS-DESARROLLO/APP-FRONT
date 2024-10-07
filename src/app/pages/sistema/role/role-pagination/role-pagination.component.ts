@@ -111,7 +111,6 @@ export default class RolePaginationComponent {
 
       "rowCount": data.totalElements,
       "getRows": (params: IGetRowsParams) => {
-        console.log(">>>>>>> " , params);
         let _filterPage = this.gridApi.getFilterModel();
         let _agSort: [] = this.gridApi.sortController.getSortModel();
         let _sortForBack: PaginationSortInterface[] = this.convertFilterSortAgGridToStandartService.ConvertSortToStandar(_agSort);
