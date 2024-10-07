@@ -55,6 +55,9 @@ export default class UserEditComponent  implements OnExit {
 
   _createRegister:boolean = false;
   disabledDelete: boolean = false;
+  disabledNew: boolean = true;
+
+
   _flagCreateRegister = signal<boolean>(false);
   _registrationStatus = signal<string>("");
   
@@ -162,6 +165,7 @@ export default class UserEditComponent  implements OnExit {
   }
 
   addRol(){
+    console.log("addRol... ");
     this.messageErrorGrilla ="";
     this.arrayRole = [];
     let data = this.customerForm.value;
