@@ -1,7 +1,6 @@
-import { Injectable, Type } from '@angular/core';
-import { PaginationSortInterface } from './interfaces/pagination.sort.interface';
-import { filter } from 'rxjs';
+import { Injectable } from '@angular/core';
 import { PaginationFilterInterface } from './interfaces/pagination.filter.interface';
+import { PaginationSortInterface } from './interfaces/pagination.sort.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +15,6 @@ export class ConvertFilterSortAgGridToStandartService {
     let arraySort:PaginationSortInterface[] = [];
 
     sort.forEach(element => {
-      console.log(element);
       let sort:PaginationSortInterface = {
         "colName": element['colId'],
         "sort": element['sort']
