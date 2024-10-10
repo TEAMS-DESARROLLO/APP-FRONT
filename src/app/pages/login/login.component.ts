@@ -1,20 +1,19 @@
-import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 
-import { FormGroup, FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { HttpClientModule, HttpErrorResponse } from '@angular/common/http';
 
-import {MatCardModule} from '@angular/material/card';
-import {MatInputModule,} from '@angular/material/input';
-import {MatButtonModule} from '@angular/material/button';
-import {MatIconModule} from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule, } from '@angular/material/input';
 
-import { LoginInterface } from './login.interface';
-import { LoginService } from './login.service';
-import { Observable } from 'rxjs/internal/Observable';
-import { LoginResponseInterface } from './login.response.interface';
 import { SessionService } from '../../session/session.service';
+import { LoginInterface } from './login.interface';
+import { LoginResponseInterface } from './login.response.interface';
+import { LoginService } from './login.service';
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -62,7 +61,7 @@ export default class LoginComponent {
           if(res.status != 200){
             this.flagMensaje = true;
           }else {
-            console.log("Uusario logado");
+            console.log("Usuario logado");
             this.sessionService.saveToken(res.token);
             //this.router.navigate (["app/menu"], { relativeTo: this.route })
             this.router.navigate (["app/menu"])

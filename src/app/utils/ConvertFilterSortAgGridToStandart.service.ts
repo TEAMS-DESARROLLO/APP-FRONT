@@ -1,8 +1,10 @@
-import { Injectable, Type } from '@angular/core';
-import { PaginationSortInterface } from './interfaces/pagination.sort.interface';
-import { filter } from 'rxjs';
+import { Injectable } from '@angular/core';
 import { PaginationFilterInterface } from './interfaces/pagination.filter.interface';
+
 import { PrimeNGConfig } from 'primeng/api';
+
+import { PaginationSortInterface } from './interfaces/pagination.sort.interface';
+
 
 @Injectable({
   providedIn: 'root',
