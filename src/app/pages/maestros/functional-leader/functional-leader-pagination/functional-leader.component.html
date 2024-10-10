@@ -1,6 +1,6 @@
-{{title}}
 
-<div class="flex-container">
+  {{title}}
+
   <shared-toolbar-toolbox [_disabledEdit]=this.disabledEdit [_disabledDelete]=this.disabledDelete
     (_newRegistro)="NewRegistter()"
     (_editRegistro)="edit()"
@@ -8,23 +8,84 @@
     (_reLoad)="reload()"
     (_printExcel)="printExcel()"
     ></shared-toolbar-toolbox>
-  <ag-grid-angular
-      style="width: 100%; height: 100%;"
-      [class]="themeClass"
-      [rowData]="rowData"
-      [columnDefs]="colDefs"
 
 
 
-      [enableCellTextSelection]=true
-      (gridReady)="onGridReady($event)"
-      (selectionChanged)="onSelectionChanged($event)"
-      (paginationChanged)="onPaginationChanged($event)"
+  <div class="container" >
+      <div class="card-header">
+        <p-table #dt
+            [value]="rowData"
+            sortMode="multiple"
+            [(selection)]="selectedLider"
+            [metaKeySelection]="metaKey"
+            dataKey="idFunctionalLeader"
+            [tableStyle]="{ 'min-width': '50rem' }"
+            [loading]="loading"
+            [lazy]="true"
+            [scrollable]="true"
+            [scrollHeight]="scrollHeight"
 
-      [loadingCellRendererParams]="loadingCellRendererParams"
-      [loadingOverlayComponentParams]="loadingOverlayComponentParams"
+            [globalFilterFields]="['idFunctionalLeader', 'names']"
+            (onRowSelect)="onSelectionChanged($event)"
+            (onRowUnselect)="onSelectionChanged(undefined)"
+            (onSort)="onSort($event)"
+            (onFilter)="onFilter($event)"
+            >
+            <ng-template pTemplate="header">
+                <tr class="head-style">
+                    <th style="width: 4rem"></th>
+                    <th pSortableColumn="idFunctionalLeader">
+                        id
+                        <p-sortIcon field="idFunctionalLeader" />
+                        <p-columnFilter type="text" field="idFunctionalLeader" display="menu"  matchMode="equals"/>
+                    </th>
+                    <th pSortableColumn="names">
+                        Nombres
+                        <p-sortIcon field="names" />
+                        <p-columnFilter type="text" field="names" display="menu" matchMode="contains"/>
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-rowData>
+                <tr [pSelectableRow]="rowData" >
+                    <td>
+                        <p-tableRadioButton [value]="rowData" />
+                    </td>
+                    <td style="width: 150px;" >{{ rowData.idFunctionalLeader }}</td>
+                    <td>{{ rowData.names }}</td>
+                </tr>
+            </ng-template>
 
-      [gridOptions]="gridOptions"
-      >
-  </ag-grid-angular>
+        </p-table>
+      </div>
+
+      <div class="card-body">
+
+      </div>
+      <!-- <div class="card-footer">
+        <p-paginator [rows]="5" [totalRecords]="200" (onPageChange)="onPageChange($event)"></p-paginator>
+
+      </div> -->
+
+    <div class="card-footer">
+        <div class="paginator">
+          <span class="label-item-por-page">Items por page: </span>
+          <p-dropdown [options]="options" optionLabel="label" optionValue="value" [(ngModel)]="rows2" (ngModelChange)="onModelChange($event)" />
+          <p-paginator [first]="first" [rows]="recordsPerPage" [totalRecords]="totalRecords" (onPageChange)="onPageChange($event)" [showCurrentPageReport]="true"
+              currentPageReportTemplate="{first} - {last} de {totalRecords}" [showPageLinks]="true" [showFirstLastIcon]="true" ></p-paginator>
+
+        </div>
+    </div>
+
 </div>
+
+
+
+
+
+
+
+
+
+
+

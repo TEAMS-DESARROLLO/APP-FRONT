@@ -1,4 +1,4 @@
 export interface FunctionalLeaderInterface {
-  idFunctionalLeaderr:number,
-  names:string
+  idFunctionalLeader?:number,
+  names?:string
 }

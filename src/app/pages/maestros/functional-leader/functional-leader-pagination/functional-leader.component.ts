@@ -1,158 +1,127 @@
-import { Component, inject } from '@angular/core';
+import { Component, HostListener, inject, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { CrudService } from '../../../../providers/crud.service';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { AgGridModule } from 'ag-grid-angular';
-import { ColDef, GridOptions, IGetRowsParams, SelectionChangedEvent, GridReadyEvent, IDatasource } from 'ag-grid-community'
-
-
-import 'ag-grid-community/styles/ag-grid.css';
-import 'ag-grid-community/styles/ag-theme-quartz.css';
+import { Table, TableModule } from 'primeng/table';
+import { PaginatorModule } from 'primeng/paginator';
+import { SortEvent } from 'primeng/api';
 
 import { ToolbarToolboxComponent } from "../../../shared/toolbar-toolbox/toolbar-toolbox.component";
 import { PaginationService } from '../../../../providers/pagination.service';
-import { ConvertFilterSortAgGridToStandartService } from '../../../../utils/ConvertFilterSortAgGridToStandart.service';
 import { PaginationSortInterface } from '../../../../utils/interfaces/pagination.sort.interface';
 import { MessagesService } from '../../../shared/messages/messages.service';
 
 import { FunctionalLeaderInterface } from './functional-leader.interface';
 
-import { DatasourcePaginationInterface } from '../../../shared/interfaces/datasource-pagination-interface';
 import { NotificationsService } from '../../../shared/services/notifications.service';
 import { ErrorInterface } from '../../../../utils/interfaces/errorInterface';
+import { debounceTime } from 'rxjs';
+import { ConvertFilterSortAgGridToStandartService } from '../../../../utils/ConvertFilterSortAgGridToStandart.service';
+
+
+interface PageEvent {
+  page?: number;
+  first?: number;
+  rows?: number;
+  pageCount?: number;
+}
+
+
 
 @Component({
   selector: 'app-community',
   standalone: true,
   templateUrl: './functional-leader.component.html',
   styleUrl: './functional-leader.component.css',
-  imports: [CommonModule, AgGridModule, ToolbarToolboxComponent],
+  imports: [
+    CommonModule,
+    ToolbarToolboxComponent,
+    TableModule,
+    PaginatorModule,
+  ],
 })
-export default class FunctionalLeaderComponent {
+export default class FunctionalLeaderComponent implements OnInit {
   title = 'LIDERES FUNCIONALES';
 
-  themeClass = 'ag-theme-quartz-dark';
+  private paginationService = inject(PaginationService);
+  private messagesService = inject(MessagesService);
+  private crudService = inject(CrudService<FunctionalLeaderInterface>);
+  private convertFilterSortAgGridToStandartService = inject(
+    ConvertFilterSortAgGridToStandartService
+  );
+  private notificacionesService = inject(NotificationsService);
 
-  gridParams: any;
-  gridApi: any;
-  gridColumnApi: any;
+  rowData: FunctionalLeaderInterface[] = [];
   currentPage: number = 0;
   dataSource: any;
   floatingFilter: boolean = false;
   countOnPagination: number = 0;
 
-  rowData!: FunctionalLeaderInterface[];
+  isSorted: boolean = false;
+  filtroForBack: any = [];
+  sortForBack: any = [];
+  metaKey: boolean = true;
+  selectedLider!: FunctionalLeaderInterface;
+  loading: boolean = false;
+  scrollHeight: string = '650px';
 
-  loadingCellRendererParams = { loadingMessage: 'One moment please...' };
-  loadingOverlayComponentParams = { loadingMessage: 'One moment please...' };
+  totalRecords: number = 0;
+  recordsPerPage: number = 10;
+  first: number = 0;
 
-  gridOptions: GridOptions = {
-    pagination: true,
-    rowModelType: 'infinite',
-    maxBlocksInCache: 1,
-    cacheBlockSize: 10,
-    paginationPageSize: 10,
-    suppressHorizontalScroll: false,
+  first2: number = 0;
 
-    paginationPageSizeSelector: [10, 20, 100],
-  };
+  rows2: number = 10;
 
-  colDefs: ColDef[] = [
-    {
-      field: 'idFunctionalLeader',
-      headerName: 'Codigo',
-      checkboxSelection: true,
-      filter: true,
-    },
-    { field: 'names', headerName: 'Nombres', filter: true, flex: 1 },
+  first3: number = 0;
+
+  rows3: number = 10;
+
+  options = [
+    { label: 5, value: 5 },
+    { label: 10, value: 10 },
+    { label: 20, value: 20 },
+    { label: 120, value: 120 },
   ];
 
-  private paginationService = inject(PaginationService);
-  private convertFilterSortAgGridToStandartService = inject(
-    ConvertFilterSortAgGridToStandartService
-  );
-  private messagesService = inject(MessagesService);
-  private crudService = inject(CrudService<FunctionalLeaderInterface>);
+  @ViewChild('dt') dt?: Table;
 
   disabledEdit: boolean = false;
   disabledDelete: boolean = false;
 
-  dataPagination: any;
-
-  private notificacionesService = inject(NotificationsService);
   constructor(private router: Router, private activeRouter: ActivatedRoute) {}
-
-  onGridReady(params: GridReadyEvent<FunctionalLeaderInterface>) {
-    this.gridParams = params;
-    this.gridApi = params.api;
-    const dataSourceAux: DatasourcePaginationInterface = {
-      content: [],
-      totalElements: 0,
-    };
-
-    this.setDataSource(dataSourceAux);
+  ngOnInit(): void {
+    this.convertFilterSortAgGridToStandartService.setSpanishLanguagePrimeNg();
+    this.updateScrollHeight();
+    this.loadDataPagination();
   }
 
-  setDataSource(data: DatasourcePaginationInterface) {
-    const dataSource: IDatasource = {
-      rowCount: data.totalElements,
-      getRows: (params: IGetRowsParams) => {
-        let _filterPage = this.gridApi.getFilterModel();
-        let _agSort: [] = this.gridApi.sortController.getSortModel();
-        let _sortForBack: PaginationSortInterface[] =
-          this.convertFilterSortAgGridToStandartService.ConvertSortToStandar(
-            _agSort
-          );
-        let _filtroForBack: any =
-          this.convertFilterSortAgGridToStandartService.ConvertFilterToStandar(
-            _filterPage
-          );
+  loadDataPagination() {
+    this.loading = true;
 
-        if (this.gridApi.paginationGetCurrentPage()) {
-          this.currentPage = this.gridApi.paginationGetCurrentPage();
-        }
-
-        let countPage = this.gridApi.paginationGetPageSize();
-
-        this.gridApi.showLoadingOverlay();
-        this.paginationService
-          .getPaginationAgGrid(this.currentPage,countPage,_filtroForBack,_sortForBack,'functionalLeader','pagination')
-          .subscribe({
-            next: (data) => {
-              this.dataPagination = data;
-              const dataAux: DatasourcePaginationInterface = {
-                content: data.content,
-                totalElements: data.totalElements,
-              };
-
-              setTimeout(() => {
-                const rowsThisPage = data.content;
-
-                let lastRow = -1;
-                if (data.content.length <= params.endRow) {
-                  lastRow = data.totalElements;
-                }
-
-                params.successCallback(rowsThisPage, lastRow);
-                this.gridApi.hideOverlay();
-
-                this.notificacionesService.showAlert(
-                  'Paginacion clientes',
-                  3000,
-                  0
-                );
-              }, 100);
-            },
-            error: (error: ErrorInterface) => {
-              this.notificacionesService.showError(error);
-              this.gridApi.hideOverlay();
-            },
-          });
-      },
-    };
-    this.gridApi!.setGridOption('datasource', dataSource);
+    let _sortForBack = this.sortForBack;
+    let _filtroForBack: any = [];
+    this.paginationService
+      .getPaginationAgGrid(
+        this.currentPage,
+        this.recordsPerPage,
+        _filtroForBack,
+        _sortForBack,
+        'functionalLeader',
+        'pagination'
+      )
+      .subscribe({
+        next: (data) => {
+          this.rowData = data.content as FunctionalLeaderInterface[];
+          this.loading = false;
+          this.totalRecords = data.totalElements;
+        },
+        error: (error: ErrorInterface) => {
+          this.notificacionesService.showError(error);
+        },
+      });
   }
 
   NewRegistter() {
@@ -161,21 +130,17 @@ export default class FunctionalLeaderComponent {
     });
   }
   edit() {
-    let rowData = this.gridApi.getSelectedRows();
-    if (rowData.length == 0) {
-      return;
-    }
-    let id = rowData[0].idFunctionalLeader;
-    this.router.navigate(['functionalLeader-edit', id], {
-      relativeTo: this.activeRouter.parent,
-    });
+    let rowData;
+    // if (rowData.length == 0) {
+    //   return;
+    // }
+    // let id = rowData[0].idFunctionalLeader;
+    // this.router.navigate(['functionalLeader-edit', id], {
+    //   relativeTo: this.activeRouter.parent,
+    // });
   }
   delete() {
-    let rowData = this.gridApi.getSelectedRows();
-    if (rowData.length == 0) {
-      return;
-    }
-    let id = rowData[0].idFunctionalLeader;
+    let id = 0;
 
     this.messagesService
       .message_question(
@@ -202,41 +167,85 @@ export default class FunctionalLeaderComponent {
         }
       });
   }
+
   print() {}
 
   printExcel() {}
   reload() {
-    this.gridApi.infiniteRowModel.resetCache();
-    this.gridApi.paginationPageSize = 10;
+    this.first = 0;
+    this.currentPage = 0;
+    this.sortForBack = [];
+    this.filtroForBack = [];
+    this.loadDataPagination();
   }
 
-  onPaginationChanged(e: any) {
-    try {
-      if (!this.gridApi.paginationGetCurrentPage()) {
-        this.currentPage = 0;
-      } else {
-        this.currentPage = this.gridApi.paginationGetCurrentPage();
-      }
-    } catch (error) {
-      this.currentPage = 0;
-    }
+  onPageChange(event: PageEvent) {
+    this.first = event.first ?? 0;
+    this.recordsPerPage = event.rows ?? 10;
+    this.currentPage = event.page ?? 0;
+    this.loadDataPagination();
   }
 
   onGridPageSizeChanged(size: number): void {
-    this.gridApi.cacheBlockSize = size;
-    //// this is a way to use private fields in typescript
-    const api: any = this.gridApi;
-    api.infinitePageRowModel.resetCache();
-    this.gridApi.paginationPageSize = size;
+    // this.gridApi.cacheBlockSize = size;
+    // //// this is a way to use private fields in typescript
+    // const api: any = this.gridApi;
+    // //api.infinitePageRowModel.resetCache();
+    // this.gridApi.paginationPageSize = size;
   }
 
-  onSelectionChanged($event: SelectionChangedEvent<any, any>) {
-    if (this.gridApi.getSelectedRows().length > 0) {
+  onSelectionChanged(e: any) {
+    if (e == undefined || e == null) {
+      this.disabledEdit = false;
+      this.disabledDelete = false;
+      return;
+    }
+    if (e.data != undefined) {
       this.disabledEdit = true;
       this.disabledDelete = true;
     } else {
       this.disabledEdit = false;
       this.disabledDelete = false;
     }
+  }
+
+  onSort(e: any) {
+    if (e == undefined || e == null) {
+      return;
+    }
+    let sort = e.multisortmeta as [];
+
+    let _sortForBack: PaginationSortInterface[] =
+      this.convertFilterSortAgGridToStandartService.ConvertSortPrimeNgToStandar(
+        sort
+      );
+    this.sortForBack = _sortForBack;
+
+    this.loadDataPagination();
+  }
+
+  onFilter(e: any) {
+    if (e == undefined || e == null) {
+      return;
+    }
+    let filter = e.filters as [];
+  }
+
+  onModelChange(e: number) {
+    this.recordsPerPage = e;
+    this.reload();
+  }
+
+  // Detecta cuando se redimensiona la ventana del navegador
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any) {
+    this.updateScrollHeight(); // Ajusta el scrollHeight cuando cambia el tamaño de la ventana
+  }
+
+  // Función para calcular el scrollHeight dinámicamente
+  updateScrollHeight() {
+    const availableHeight = window.innerHeight; // Altura disponible de la ventana
+    const offset = 600; // Ajuste según el diseño de la página, margenes, encabezados, etc.
+    this.scrollHeight = availableHeight - offset + 'px';
   }
 }
