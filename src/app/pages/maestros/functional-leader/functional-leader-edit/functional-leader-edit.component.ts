@@ -124,6 +124,7 @@ export default class FunctionalLeaderEditComponent implements OnExit {
           this.crudService.readById("functionalLeader","",id)
           .subscribe(
             data => {
+
               Object.keys(data).forEach(name => {
                 if (this.customerForm.controls[name]) {
                   this.customerForm.controls[name].patchValue(data[name]);

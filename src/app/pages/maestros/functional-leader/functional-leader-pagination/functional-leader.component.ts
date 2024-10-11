@@ -70,14 +70,8 @@ export default class FunctionalLeaderComponent implements OnInit {
   totalRecords: number = 0;
   recordsPerPage: number = 10;
   first: number = 0;
-
-  first2: number = 0;
-
   rows2: number = 10;
 
-  first3: number = 0;
-
-  rows3: number = 10;
 
   options = [
     { label: 5, value: 5 },
@@ -92,6 +86,7 @@ export default class FunctionalLeaderComponent implements OnInit {
   disabledDelete: boolean = false;
 
   constructor(private router: Router, private activeRouter: ActivatedRoute) {}
+
   ngOnInit(): void {
     this.convertFilterSortAgGridToStandartService.setSpanishLanguagePrimeNg();
     this.updateScrollHeight();
@@ -129,6 +124,7 @@ export default class FunctionalLeaderComponent implements OnInit {
       relativeTo: this.activeRouter.parent,
     });
   }
+
   edit() {
 
     let rowData = this.dt?.selection ;
@@ -143,9 +139,8 @@ export default class FunctionalLeaderComponent implements OnInit {
       relativeTo: this.activeRouter.parent,
     });
   }
+
   delete() {
-
-
     let rowData = this.dt?.selection;
     let rowsData: FunctionalLeaderInterface[] = [];
     rowsData.push(rowData);
@@ -199,13 +194,6 @@ export default class FunctionalLeaderComponent implements OnInit {
     this.loadDataPagination();
   }
 
-  onGridPageSizeChanged(size: number): void {
-    // this.gridApi.cacheBlockSize = size;
-    // //// this is a way to use private fields in typescript
-    // const api: any = this.gridApi;
-    // //api.infinitePageRowModel.resetCache();
-    // this.gridApi.paginationPageSize = size;
-  }
 
   onSelectionChanged(e: any) {
     if (e == undefined || e == null) {

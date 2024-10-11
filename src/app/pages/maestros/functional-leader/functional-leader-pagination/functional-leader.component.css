@@ -134,7 +134,6 @@ p-table tr td {
   margin-top: 0px;
 }
 
-
 ::ng-deep .p-dropdown .p-dropdown-label {
   color: #fff;
   font-size: 12px;
@@ -148,6 +147,16 @@ p-table tr td {
   font-size: 12px;
   padding: 0px;
   margin: 0px;
+}
+
+::ng-deep .p-selectable-row.p-highlight {
+  background-color: rgb(153, 156, 156) !important;
+  color: black !important;
+}
+
+::ng-deep .p-selectable-row:hover {
+  background-color: rgb(153, 156, 156) !important;
+  cursor: pointer;
 }
 
 

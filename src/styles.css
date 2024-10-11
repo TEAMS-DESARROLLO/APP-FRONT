@@ -20,7 +20,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
-.p-selectable-row.p-highlight {
+/* .p-selectable-row.p-highlight {
   background-color: rgb(153, 156, 156) !important;
   color: black !important;
 }
@@ -28,5 +28,5 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .p-selectable-row:hover {
   background-color: rgb(153, 156, 156) !important;
   cursor: pointer;
-}
+} */
 
