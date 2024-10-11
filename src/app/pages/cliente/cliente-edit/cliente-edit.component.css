@@ -29,3 +29,10 @@
   width: 100%;
   margin-right: 5px;
 }
+.flex-container {
+  display: flex;
+}
+
+.flex-item {
+  flex-grow: 1;
+}

@@ -125,7 +125,7 @@ export default class UserPaginationComponent {
         let countPage = this.gridApi.paginationGetPageSize();
 
         this.gridApi.showLoadingOverlay();
-        this.paginationService.getPaginationAgGrid(this.currentPage, countPage, _filtroForBack, _sortForBack, "user", "pagination")
+        this.paginationService.getPaginationAgGrid(this.currentPage, countPage, _filtroForBack, [{'colName':'idUsuario','sort':'desc'}], "user", "pagination")
           .subscribe({
             next: (data) => {
               
