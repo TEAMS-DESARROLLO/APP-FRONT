@@ -198,6 +198,7 @@ export const routes: Routes = [
               import(
                 './pages/maestros/functional-leader/functional-leader-pagination/functional-leader.component'
               ),
+            canDeactivate: [exitGuard],
           },
           {
             path: 'functionalLeader-edit/:id',
@@ -239,33 +240,40 @@ export const routes: Routes = [
             canDeactivate: [exitGuard],
           },
           {
-            path : 'users',
+            path: 'users',
             title: 'Usuarios',
-            loadComponent : () => import('./pages/sistema/user-pagination/user-pagination.component'),
-            canDeactivate : [exitGuard]
+            loadComponent: () =>
+              import(
+                './pages/sistema/user-pagination/user-pagination.component'
+              ),
+            canDeactivate: [exitGuard],
           },
           {
-            path : 'users-edit/:id',
+            path: 'users-edit/:id',
             title: 'Usuarios',
-            loadComponent : () => import('./pages/sistema/user-edit/user-edit.component'),
-            canDeactivate : [exitGuard]
+            loadComponent: () =>
+              import('./pages/sistema/user-edit/user-edit.component'),
+            canDeactivate: [exitGuard],
           },
           {
-            path : 'role',
+            path: 'role',
             title: 'Rol',
-            loadComponent : () => import('./pages/sistema/role/role-pagination/role-pagination.component'),
-            canDeactivate : [exitGuard]
+            loadComponent: () =>
+              import(
+                './pages/sistema/role/role-pagination/role-pagination.component'
+              ),
+            canDeactivate: [exitGuard],
           },
           {
-            path : 'role-edit/:id',
+            path: 'role-edit/:id',
             title: 'Rol',
-            loadComponent : () => import('./pages/sistema/role/role-edit/role-edit.component'),
-            canDeactivate : [exitGuard]
-          }
-        ]
-
-      }
-    ]
+            loadComponent: () =>
+              import('./pages/sistema/role/role-edit/role-edit.component'),
+            canDeactivate: [exitGuard],
+          },
+        ],
+      },
+    ],
   },
   {
     path: '',

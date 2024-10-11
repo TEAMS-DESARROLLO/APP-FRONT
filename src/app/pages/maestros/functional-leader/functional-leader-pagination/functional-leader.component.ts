@@ -102,7 +102,7 @@ export default class FunctionalLeaderComponent implements OnInit {
     this.loading = true;
 
     let _sortForBack = this.sortForBack;
-    let _filtroForBack: any = [];
+    let _filtroForBack= this.filtroForBack;
     this.paginationService
       .getPaginationAgGrid(
         this.currentPage,
@@ -130,17 +130,30 @@ export default class FunctionalLeaderComponent implements OnInit {
     });
   }
   edit() {
-    let rowData;
-    // if (rowData.length == 0) {
-    //   return;
-    // }
-    // let id = rowData[0].idFunctionalLeader;
-    // this.router.navigate(['functionalLeader-edit', id], {
-    //   relativeTo: this.activeRouter.parent,
-    // });
+
+    let rowData = this.dt?.selection ;
+    let rowsData: FunctionalLeaderInterface[] = [];
+    rowsData.push(rowData);
+
+    if (rowsData.length == 0) {
+      return;
+    }
+    let id = rowsData[0].idFunctionalLeader;
+    this.router.navigate(['functionalLeader-edit', id], {
+      relativeTo: this.activeRouter.parent,
+    });
   }
   delete() {
-    let id = 0;
+
+
+    let rowData = this.dt?.selection;
+    let rowsData: FunctionalLeaderInterface[] = [];
+    rowsData.push(rowData);
+
+    if (rowsData.length == 0) {
+      return;
+    }
+    let id = rowsData[0].idFunctionalLeader;
 
     this.messagesService
       .message_question(
@@ -225,10 +238,9 @@ export default class FunctionalLeaderComponent implements OnInit {
   }
 
   onFilter(e: any) {
-    if (e == undefined || e == null) {
-      return;
-    }
-    let filter = e.filters as [];
+
+    this.filtroForBack = this.convertFilterSortAgGridToStandartService.ConvertFilterPrimeNgToStandar(e);
+    this.loadDataPagination();
   }
 
   onModelChange(e: number) {

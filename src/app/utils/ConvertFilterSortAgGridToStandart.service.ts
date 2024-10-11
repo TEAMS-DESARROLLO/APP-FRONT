@@ -46,6 +46,31 @@ export class ConvertFilterSortAgGridToStandartService {
     return arraySort;
   }
 
+  ConvertFilterPrimeNgToStandar(e:any){
+    if (e == undefined || e == null) {
+      return [];
+    }
+    let filters = e.filters;
+    let _filtroForBack: any = [];
+    for (let key in filters) {
+      if (filters.hasOwnProperty(key)) {
+        let filter = filters[key];
+        if (filter[0].value != null && filter[0].value != undefined) {
+          _filtroForBack.push({
+            field: key,
+            value: filter[0].value,
+            matchMode: filter[0].matchMode,
+          });
+        }
+      }
+    }
+    if (_filtroForBack.length == 0) {
+      return [];
+    }
+    return _filtroForBack;
+
+  }
+
   ConvertFilterToStandar(filtro: Object[]) {
     let arrayObjectChild: PaginationFilterInterface[] = [];
     let arrayFiltros = [];
@@ -56,7 +81,6 @@ export class ConvertFilterSortAgGridToStandartService {
         arrayFiltros.push({ key: key, val: filtro[key] });
       }
     }
-
 
     for (let index = 0; index < arrayFiltros.length; index++) {
       const objeto = arrayFiltros[index];
