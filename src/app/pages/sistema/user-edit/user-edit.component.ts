@@ -26,10 +26,12 @@ import { ToolbarSaveQuitComponent } from '../../shared/toolbar-save-quit/toolbar
 import { ToolbarToolboxComponent } from '../../shared/toolbar-toolbox/toolbar-toolbox.component';
 import { RolInterface } from '../role/role-pagination/rol.interface';
 import { UserInterface } from '../user-pagination/user.interface';
+import { MatGridListModule } from '@angular/material/grid-list';
+
 @Component({
   selector: 'app-user-edit',
   standalone: true,
-  imports: [CommonModule,AgGridModule,ToolbarToolboxComponent,MatFormFieldModule,MatIconModule,ReactiveFormsModule,MatInputModule,MatCardModule,ToolbarSaveQuitComponent,DropDownSharedMultipleComponent,MatFormFieldModule, MatInputModule, MatDatepickerModule, MatButtonModule],
+  imports: [CommonModule,AgGridModule,ToolbarToolboxComponent,MatFormFieldModule,MatIconModule,ReactiveFormsModule,MatInputModule,MatCardModule,ToolbarSaveQuitComponent,DropDownSharedMultipleComponent,MatFormFieldModule, MatInputModule, MatDatepickerModule, MatButtonModule,MatGridListModule,],
   templateUrl: './user-edit.component.html',
   styleUrl: './user-edit.component.css',
   providers: [provideNativeDateAdapter(),{ provide: MAT_DATE_LOCALE, useValue: 'en-GB' }],
@@ -93,6 +95,8 @@ export default class UserEditComponent  implements OnExit {
   loadingOverlayComponentParams = { loadingMessage: 'One moment please...' };
 
   dataPagination: any;
+  filename: string = '';
+  base64Image: string | ArrayBuffer | null = null;
 
   messageErrorGrilla : string = "";
   constructor(private fb: FormBuilder,
@@ -129,6 +133,7 @@ export default class UserEditComponent  implements OnExit {
       this.arrayRole = this.dataRole.filter(role => arrayRolesLoad.includes(role.value));
       const dataSourceAux: DatasourcePaginationInterface = { "content": [], "totalElements": 0 };
       this.setDataSource(dataSourceAux);
+      console.log(this.arrayRole)
   }
 
   onSelectionChanged($event: SelectionChangedEvent<any, any>) {
@@ -219,6 +224,8 @@ export default class UserEditComponent  implements OnExit {
     username: ['', Validators.required],
     password: ['', this._flagCreateRegister() ? Validators.required : Validators.nullValidator ],
     expirationDate: ["", Validators.required],
+    file: [''],
+    filename:['']
   });
 
  
@@ -259,10 +266,15 @@ export default class UserEditComponent  implements OnExit {
                 const control = this.customerForm.get(name);
                 if (control) {
                   if (name === "expirationDate") {
-                  control.patchValue(this.convertStringToDate(data[name]));
-                  } else {
+                    this.customerForm.get('expirationDate')?.setValue(this.convertStringToDate(data[name].toString()));
+                  } 
+                  else if(name === "file"){
+                    this.base64Image = data[name];
+                  }
+                  else {
                   control.patchValue(data[name]);
                   }
+                  this.loadgrillaRole()
                 }
               });
             })
@@ -330,6 +342,8 @@ export default class UserEditComponent  implements OnExit {
         registrationStatus: this._registrationStatus(),
         password: data.password,
         expirationDate: this.formatDate(data.expirationDate),
+        file:data.file,
+        filename:data.filename
       };
       
       this.crudService.create("user","create",dataUser)
@@ -366,6 +380,8 @@ export default class UserEditComponent  implements OnExit {
         username: data.username,
         registrationStatus: this._registrationStatus(),
         expirationDate: this.formatDate(data.expirationDate),
+        file:data.file,
+        filename:data.filename
       };
     
       let id = this.customerForm.get('idUsuario')?.value;
@@ -391,5 +407,24 @@ export default class UserEditComponent  implements OnExit {
   get idRoleForm (){
     return this.customerForm.get('roles') as FormControl;
   }
+
+  onFileSelected(event: Event): void {
+    const fileInput = event.target as HTMLInputElement;
+    if (fileInput.files && fileInput.files.length > 0) {
+      const file = fileInput.files[0];
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const result = e.target?.result;
+        if (result) {
+          this.base64Image = result;
+          this.customerForm.patchValue({ file: this.base64Image });
+          this.customerForm.get('filename')?.setValue(file.name);
+        }
+      };
+      reader.readAsDataURL(file); // Convertir archivo a base64
+    }
+  }
+
+
 
 }

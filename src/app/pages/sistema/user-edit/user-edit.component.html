@@ -4,11 +4,79 @@
       <h3>{{title}}</h3>
     </mat-card-title>
   </mat-card-header>
-  <div style="margin-bottom: 10px;"></div>
+
 
   <mat-card-content>
     <form [formGroup]="customerForm" (keydown.enter)="$event.preventDefault()">
-
+      <div class="flex-container" style="display: flex; justify-content: flex-center; padding-bottom: 20px;">
+        <div class="flex-item" style="display: flex; justify-content: center; align-items: center;">
+          <img [src]="base64Image" width="120px" height="120px" class="avatar mat-elevation-z8" />
+      </div>
+      </div>
+      <!--<div class="flex-container">
+        <div class="flex-item">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Id Usuario</mat-label>
+            <input readonly="true" matInput formControlName="idUsuario" placeholder="Código">
+          </mat-form-field>
+        </div>
+      </div>-->
+      <div class="flex-container">
+        <div class="flex-item">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Nombres</mat-label>
+            <input matInput formControlName="nombres" placeholder="Nombres y Apellidos">
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="flex-container">
+        <div class="flex-item">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Usuario</mat-label>
+            <input matInput formControlName="username" placeholder="Usuario" [readonly]="!this._flagCreateRegister()">
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="flex-container" style="display: flex; flex-wrap: wrap; gap: 16px;">
+        <div style="flex: 1 1 25%;" *ngIf="this._flagCreateRegister()">
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Clave</mat-label>
+                <input [type]="'password'" matInput formControlName="password" placeholder="Password">
+            </mat-form-field>
+        </div>
+        <div style="flex: 1 1 25%;">
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Fecha de vencimiento</mat-label>
+                <input matInput [matDatepicker]="expirationDate" formControlName="expirationDate" [min]="minDate">
+                <mat-hint>DD/MM/YYYY</mat-hint>
+                <mat-datepicker-toggle matIconSuffix [for]="expirationDate"></mat-datepicker-toggle>
+                <mat-datepicker #expirationDate></mat-datepicker>
+            </mat-form-field>
+        </div>
+        <div style="flex: 1 1 25%;">
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Foto</mat-label>
+                <button mat-icon-button matPrefix (click)="f_input.click()">
+                    <mat-icon>attach_file</mat-icon>
+                </button>
+                <input type="text" readonly matInput formControlName="filename" />
+                <input type="file" hidden #f_input (change)="onFileSelected($event)" />
+            </mat-form-field>
+        </div>
+    </div>
+    
+    
+      <div class="flex-container">
+        <div style="flex-grow: 1;">
+          <app-drop-down-shared-multiple _captionLabel="Rol" [_datosInput]="this.dataRole"
+            [_formControl]="idRoleForm"></app-drop-down-shared-multiple>
+        
+          <button matTooltip="Grabar" mat-icon-button color="primary" aria-label="Example icon-button with a heart icon" (click)="addRol()" >
+            <mat-icon>playlist_add</mat-icon>
+          </button> 
+        </div>
+      </div>
+      <!--
       <div class="flex-container">
         <div style="flex-grow: 0;">
           <mat-form-field class="form-field" appearance="outline">
@@ -17,7 +85,29 @@
           </mat-form-field>
         </div>
       </div>
-
+      <div class="flex-container">
+        <div style="flex-grow: 0;">
+          <mat-form-field class="form-field" appearance="outline">
+            <mat-label>Foto</mat-label>
+            <button mat-icon-button matPrefix (click)="f_input.click()">
+              <mat-icon>attach_file</mat-icon>
+            </button>
+            <input type="text" readonly matInput formControlName="fileName"  />
+            <input
+              type="file"
+              hidden
+              #f_input
+              (change)="onFileSelected($event)"
+            />
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="flex-container" *ngIf="base64Image">
+        <div style="flex-grow: 0;">
+          <img [src]="base64Image" alt="Imagen seleccionada" width="200" height="200" />
+        </div>
+      </div>
+    
       <div class="flex-container left">
         <div style="flex-grow: 0;">
           <mat-form-field class="form-field" appearance="outline">
@@ -59,12 +149,13 @@
         <div style="flex-grow: 0;">
           <app-drop-down-shared-multiple _captionLabel="Rol" [_datosInput]="this.dataRole"
             [_formControl]="idRoleForm"></app-drop-down-shared-multiple>
-
+        
           <button matTooltip="Grabar" mat-icon-button color="primary" aria-label="Example icon-button with a heart icon" (click)="addRol()">
             <mat-icon>playlist_add</mat-icon>
           </button> 
         </div>
       </div>
+      -->
       <hr>
       <!-- Agrega la tabla aquï¿½ dentro del mat-card -->
       <div class="flex-container-grilla">

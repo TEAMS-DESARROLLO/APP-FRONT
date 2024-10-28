@@ -6,4 +6,6 @@ export interface UserInterface {
     registrationStatus : string;
     password ?: string;
     expirationDate : string;
+    file:string;
+    filename:string;
 }
