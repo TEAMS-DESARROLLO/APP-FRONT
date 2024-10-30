@@ -133,7 +133,6 @@ export default class UserEditComponent  implements OnExit {
       this.arrayRole = this.dataRole.filter(role => arrayRolesLoad.includes(role.value));
       const dataSourceAux: DatasourcePaginationInterface = { "content": [], "totalElements": 0 };
       this.setDataSource(dataSourceAux);
-      console.log(this.arrayRole)
   }
 
   onSelectionChanged($event: SelectionChangedEvent<any, any>) {
@@ -224,7 +223,7 @@ export default class UserEditComponent  implements OnExit {
     username: ['', Validators.required],
     password: ['', this._flagCreateRegister() ? Validators.required : Validators.nullValidator ],
     expirationDate: ["", Validators.required],
-    file: [''],
+    imageUser: [''],
     filename:['']
   });
 
@@ -261,14 +260,17 @@ export default class UserEditComponent  implements OnExit {
           this.crudService.readById("user","",id)
           .subscribe(
             data => {
+              console.log(data);
               this._registrationStatus.set(data.registrationStatus);
               Object.keys(data).forEach(name => {
+                console.log(name);
                 const control = this.customerForm.get(name);
                 if (control) {
                   if (name === "expirationDate") {
                     this.customerForm.get('expirationDate')?.setValue(this.convertStringToDate(data[name].toString()));
                   } 
-                  else if(name === "file"){
+                  else if(name === "imageUser"){
+                    console.log('entra al imageUser')
                     this.base64Image = data[name];
                   }
                   else {
@@ -342,8 +344,7 @@ export default class UserEditComponent  implements OnExit {
         registrationStatus: this._registrationStatus(),
         password: data.password,
         expirationDate: this.formatDate(data.expirationDate),
-        file:data.file,
-        filename:data.filename
+        imageUser:data.imageUser
       };
       
       this.crudService.create("user","create",dataUser)
@@ -380,8 +381,7 @@ export default class UserEditComponent  implements OnExit {
         username: data.username,
         registrationStatus: this._registrationStatus(),
         expirationDate: this.formatDate(data.expirationDate),
-        file:data.file,
-        filename:data.filename
+        imageUser:data.imageUser
       };
     
       let id = this.customerForm.get('idUsuario')?.value;
@@ -417,7 +417,7 @@ export default class UserEditComponent  implements OnExit {
         const result = e.target?.result;
         if (result) {
           this.base64Image = result;
-          this.customerForm.patchValue({ file: this.base64Image });
+          this.customerForm.patchValue({ imageUser: this.base64Image });
           this.customerForm.get('filename')?.setValue(file.name);
         }
       };
