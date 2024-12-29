@@ -17,7 +17,7 @@ import { FunctionalLeaderInterface } from './functional-leader.interface';
 
 import { NotificationsService } from '../../../shared/services/notifications.service';
 import { ErrorInterface } from '../../../../utils/interfaces/errorInterface';
-import { debounceTime } from 'rxjs';
+import { debounceTime, of } from 'rxjs';
 import { ConvertFilterSortAgGridToStandartService } from '../../../../utils/ConvertFilterSortAgGridToStandart.service';
 
 
@@ -44,16 +44,19 @@ interface PageEvent {
 })
 export default class FunctionalLeaderComponent implements OnInit {
   title = 'LIDERES FUNCIONALES';
+  offsetScrollInit = 600;
 
   private paginationService = inject(PaginationService);
   private messagesService = inject(MessagesService);
   private crudService = inject(CrudService<FunctionalLeaderInterface>);
+
   private convertFilterSortAgGridToStandartService = inject(
     ConvertFilterSortAgGridToStandartService
   );
+
   private notificacionesService = inject(NotificationsService);
 
-  rowData: FunctionalLeaderInterface[] = [];
+  rowData: any[] = [];
   currentPage: number = 0;
   dataSource: any;
   floatingFilter: boolean = false;
@@ -63,7 +66,7 @@ export default class FunctionalLeaderComponent implements OnInit {
   filtroForBack: any = [];
   sortForBack: any = [];
   metaKey: boolean = true;
-  selectedLider!: FunctionalLeaderInterface;
+  selectedLider!: any // FunctionalLeaderInterface;
   loading: boolean = false;
   scrollHeight: string = '650px';
 
@@ -71,7 +74,6 @@ export default class FunctionalLeaderComponent implements OnInit {
   recordsPerPage: number = 10;
   first: number = 0;
   rows2: number = 10;
-
 
   options = [
     { label: 5, value: 5 },
@@ -84,6 +86,8 @@ export default class FunctionalLeaderComponent implements OnInit {
 
   disabledEdit: boolean = false;
   disabledDelete: boolean = false;
+  controller: string = 'community';
+  event: string = 'pagination';
 
   constructor(private router: Router, private activeRouter: ActivatedRoute) {}
 
@@ -97,7 +101,7 @@ export default class FunctionalLeaderComponent implements OnInit {
     this.loading = true;
 
     let _sortForBack = this.sortForBack;
-    let _filtroForBack= this.filtroForBack;
+    let _filtroForBack = this.filtroForBack;
     this.paginationService
       .getPaginationAgGrid(
         this.currentPage,
@@ -126,8 +130,7 @@ export default class FunctionalLeaderComponent implements OnInit {
   }
 
   edit() {
-
-    let rowData = this.dt?.selection ;
+    let rowData = this.dt?.selection;
     let rowsData: FunctionalLeaderInterface[] = [];
     rowsData.push(rowData);
 
@@ -194,7 +197,6 @@ export default class FunctionalLeaderComponent implements OnInit {
     this.loadDataPagination();
   }
 
-
   onSelectionChanged(e: any) {
     if (e == undefined || e == null) {
       this.disabledEdit = false;
@@ -226,14 +228,17 @@ export default class FunctionalLeaderComponent implements OnInit {
   }
 
   onFilter(e: any) {
-
-    this.filtroForBack = this.convertFilterSortAgGridToStandartService.ConvertFilterPrimeNgToStandar(e);
+    this.filtroForBack =
+      this.convertFilterSortAgGridToStandartService.ConvertFilterPrimeNgToStandar(
+        e
+      );
     this.loadDataPagination();
   }
 
   onModelChange(e: number) {
     this.recordsPerPage = e;
     this.reload();
+    this.updateScrollHeight();
   }
 
   // Detecta cuando se redimensiona la ventana del navegador
@@ -245,7 +250,14 @@ export default class FunctionalLeaderComponent implements OnInit {
   // Función para calcular el scrollHeight dinámicamente
   updateScrollHeight() {
     const availableHeight = window.innerHeight; // Altura disponible de la ventana
-    const offset = 600; // Ajuste según el diseño de la página, margenes, encabezados, etc.
+    let offset = availableHeight * 0.35; // Ajuste según el diseño de la página, margenes, encabezados, etc.
+
     this.scrollHeight = availableHeight - offset + 'px';
+    const porcentajeActual = offset / availableHeight;
+
+    offset = availableHeight * porcentajeActual;
+    this.offsetScrollInit = offset;
+    this.scrollHeight = availableHeight - offset + 'px';
+
   }
 }

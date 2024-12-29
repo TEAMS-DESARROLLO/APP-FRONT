@@ -1,58 +1,46 @@
-
-  {{title}}
-
-  <shared-toolbar-toolbox [_disabledEdit]=this.disabledEdit [_disabledDelete]=this.disabledDelete
-    (_newRegistro)="NewRegistter()"
-    (_editRegistro)="edit()"
-    (_deleteRegistro)="delete()"
-    (_reLoad)="reload()"
-    (_printExcel)="printExcel()"
-    ></shared-toolbar-toolbox>
-
-
-
   <div class="container" >
-      <div class="card-header">
+      <div class="card-header" >
         <p-table #dt
             [value]="rowData"
             sortMode="multiple"
-            [(selection)]="selectedLider"
+            [(selection)]="selectedEntity"
             [metaKeySelection]="metaKey"
-            dataKey="idFunctionalLeader"
+            dataKey={{this.dataKey}}
             [tableStyle]="{ 'min-width': '50rem' }"
             [loading]="loading"
             [lazy]="true"
             [scrollable]="true"
             [scrollHeight]="scrollHeight"
 
-            [globalFilterFields]="['idFunctionalLeader', 'names']"
+            [globalFilterFields]="this.globalFilterFields"
             (onRowSelect)="onSelectionChanged($event)"
             (onRowUnselect)="onSelectionChanged(undefined)"
             (onSort)="onSort($event)"
             (onFilter)="onFilter($event)"
             >
             <ng-template pTemplate="header">
-                <tr class="head-style">
-                    <th style="width: 4rem"></th>
-                    <th pSortableColumn="idFunctionalLeader">
-                        id
-                        <p-sortIcon field="idFunctionalLeader" />
-                        <p-columnFilter type="text" field="idFunctionalLeader" display="menu"  matchMode="equals"/>
-                    </th>
-                    <th pSortableColumn="names">
-                        Nombres
-                        <p-sortIcon field="names" />
-                        <p-columnFilter type="text" field="names" display="menu" matchMode="contains"/>
-                    </th>
+                <tr class="head-style" >
+                  <th style="width: 2rem"></th>
+                  @for (object of this.propertiesGrid; track $index) {
+                        <th pSortableColumn={{object.propertyColumn}}>
+                            {{object.title}}
+                            <p-sortIcon field={{object.propertyColumn}} />
+                            <p-columnFilter type="text" field={{object.propertyColumn}} display="menu"  matchMode="equals"/>
+                        </th>
+                    }
+
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-rowData>
-                <tr [pSelectableRow]="rowData">
-                    <td>
-                        <p-tableRadioButton [value]="rowData" />
-                    </td>
-                    <td style="width: 150px;" >{{ rowData.idFunctionalLeader }}</td>
-                    <td>{{ rowData.names }}</td>
+                <tr [pSelectableRow]="rowData" >
+                  <td >
+                      <p-tableRadioButton [value]="rowData" />
+                  </td>
+                  @for (object of this.propertiesGrid; track $index) {
+                    <td [ngStyle]="object.style" >{{ rowData[object.propertyColumn] }}</td>
+                  }
+
+
                 </tr>
             </ng-template>
 
@@ -78,14 +66,4 @@
     </div>
 
 </div>
-
-
-
-
-
-
-
-
-
-
 

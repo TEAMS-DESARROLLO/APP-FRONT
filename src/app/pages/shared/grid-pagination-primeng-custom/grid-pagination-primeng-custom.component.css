@@ -16,15 +16,16 @@
 
 
 
-p-table th  {
+p-table th {
   background-color: #373f49;
-  padding : 14px 4px 14px 14px;
+  padding: 14px 4px 14px 14px;
   text-align: left;
   font-size: 12px;
 }
+
 p-table tr {
   background-color: #303030;
-  padding : 14px 4px 14px 14px;
+  padding: 14px 4px 14px 14px;
   text-align: left;
   font-size: 12px;
 }
@@ -32,7 +33,8 @@ p-table tr {
 p-table th:first-child {
   border-top-left-radius: 10px;
 }
-p-table  th:last-child {
+
+p-table th:last-child {
   border-top-right-radius: 10px;
 }
 
@@ -65,16 +67,18 @@ p-table tr td {
   width: 100%;
   min-height: 75vh;
   border-radius: 10px;
-  border : 1px solid #5382e7;
+  border: 1px solid #5382e7;
   padding: 2px;
 }
 
 .card-header {
   flex: 0 0 auto;
- }
+}
+
 .card-body {
   flex: 1 1 auto;
 }
+
 .card-footer {
   flex: 0 0 auto;
   /* border : 0.3px solid #839e5f; */
@@ -83,15 +87,15 @@ p-table tr td {
   font-size: 12px;
   padding: 5px;
 
- }
+}
 
- .dropdown {
-   display: flex;
-   font-size: 12px;
-   height: 30px;
-   background-color: transparent;
+.dropdown {
+  display: flex;
+  font-size: 12px;
+  height: 30px;
+  background-color: transparent;
 
- }
+}
 
 
 .paginator {
@@ -100,6 +104,7 @@ p-table tr td {
   justify-content: flex-end;
 
 }
+
 .label-item-por-page {
   color: #fff;
   font-size: 12px;
@@ -107,7 +112,7 @@ p-table tr td {
   margin: 0px;
 }
 
- ::ng-deep .p-paginator {
+::ng-deep .p-paginator {
   background-color: transparent;
   color: #fff;
   border: none;
@@ -116,16 +121,16 @@ p-table tr td {
   padding: 0px;
   margin-top: -10px;
 
- }
+}
 
 
- ::ng-deep .p-paginator .p-paginator-page   {
+::ng-deep .p-paginator .p-paginator-page {
   border: none;
   height: 20px;
   font-size: 14px;
   padding: 0px;
 
- }
+}
 
 ::ng-deep .p-dropdown {
   background-color: transparent;
@@ -161,10 +166,3 @@ p-table tr td {
   background-color: rgb(153, 156, 156) !important;
   cursor: pointer;
 }
-
-
-
-
-
-
-

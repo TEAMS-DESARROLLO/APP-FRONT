@@ -75,7 +75,7 @@ export default class TipoViaEditComponent implements OnExit {
 
   ngOnInit() {
     this.customerForm = this.fb.group({
-      idCommunity: ['0', Validators.required],
+      idPractice: ['0', Validators.required],
       description: ['', Validators.required],
 
     });
